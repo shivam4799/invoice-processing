@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block uploadpdf %}
+<div class="toast" style="position: absolute; top: 0; right: 0;">
+        <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+</div>
+ <div class="formContainer">
+
+           <form method="post" enctype="multipart/form-data" action="{% url 'upload' %}">
+             {% csrf_token %}
+                <input type="file" name="document">
+                   <button type="submit" class="btn btn-primary">Upload book</button>
+                    </form>
+            </div>
+
+{% endblock %}
+
+{% block listinvoices %}
+{% endblock %}
+

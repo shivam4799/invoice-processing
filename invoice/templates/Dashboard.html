@@ -1,0 +1,33 @@
+{% extends 'demo.html' %}
+
+
+{% block listinvoices %}
+<table class="table table-bordered bg-white mt-4">
+                        <thead>
+                          <tr>
+                            <th scope="col">Invoice No</th>
+                            <th scope="col">Vendor</th>
+                            <th scope="col">GSTIN</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="actionColumn">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {%for invoice in invoices%}
+                          <tr>
+                            <td>{{invoice.invoice_no}}</td>
+                            <td>{{invoice.vendor_name}}</td>
+                            <td>{{invoice.phone_number}}</td>
+                            <td>{{invoice.invoice_date}}</td>
+                            <td>
+                                <span class="badge badge-success">Success</span>
+                            </td>
+                            <td><a href="{% url 'detail' invoice.id %}">Detail</a> </td>
+                          </tr>
+                        {%endfor%}
+
+                        </tbody>
+                      </table>
+
+{% endblock %}

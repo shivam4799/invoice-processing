@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block listinvoices %}
+<div class="card">
+        <div class="card-header">
+            <h1><b>Invoice {{ object.id }}</b></h1>
+        </div>
+        <div class="card-body">
+        <table class="table table-bordered">
+                <tr>
+                    <td>Item Description </td>
+                    <td>Item Quantity</td>
+                    <td>Item Rate</td>
+                </tr>
+                {% for item in invoices_details.invoice.filter %}
+                <tr>
+                    <td>{{ item.item_description }}</td>
+                    <td>{{ item.item_quantity }}</td>
+                    <td>{{ item.item_rate }}</td>
+                </tr>
+                {% endfor %}
+              </table>
+
+        </div>
+</div>
+{% endblock %}
+
+
