@@ -1,0 +1,79 @@
+.fullHeightContainer {
+    min-height: 100vh;
+    background-color: #fff;
+}
+.contentContainer {
+    height: 650px;
+    border-radius: 4px;
+    overflow: hidden;
+    background-size: cover;
+}
+.contentContainer .aboutContainer {
+    background-image: linear-gradient(150deg, #305e88 0%, #12314e eb 100%);
+    background-image: linear-gradient(150deg, #12314e 0%, #305e88 100%);
+    background-repeat: repeat-x;
+}
+.contentContainer .aboutContainer .brandName {
+    color: white;
+    font-size: 24px;
+    letter-spacing: 2px;
+}
+.contentContainer .aboutContainer .brandInfo {
+    margin-top: 140px;
+}
+.contentContainer .aboutContainer .brandInfo .infoText {
+    font-size: 20px;
+    font-weight: 300;
+    color: #bababa;
+}
+.contentContainer .loginContainer {
+    background-color: #fff;
+}
+.contentContainer .loginContainer .loginFormContainer {
+    margin-top: 40px;
+}
+.contentContainer .buttonContainer {
+    margin-top: 30px;
+}
+.contentContainer .loginSpinner {
+    vertical-align: middle;
+}
+.contentContainer .forgotLink {
+    color: #9b9b9b;
+}
+
+
+/* p {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #dfdfdf;
+    line-height: 0.1em;
+    margin: 10px 0 20px;
+}
+p span {
+    background: #fff;
+    padding: 0 10px;
+    font-size: 14px;
+} */
+.loginContainer {
+    position: relative;
+    height: 100%;
+}
+.loginContainer .loginProvider {
+    margin-top: 32px;
+    width: 100%;
+}
+.loginContainer .loginProvider .providerButton {
+    margin-top: 24px;
+}
+.googleButton {
+    border: 1px solid #cbcbcb;
+    color: #858585;
+}
+.loginSpinner {
+    vertical-align: middle;
+}
+.googleIcon {
+    height: 16px;
+}
+
