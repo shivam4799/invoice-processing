@@ -1,0 +1,223 @@
+body {
+    font-family: 'Fira Sans Condensed', sans-serif !important;
+}
+#the-canvas {
+    border: 10px solid transparent;
+}
+.rectangle {
+    border: 1px solid #FF0000;
+    position: absolute;
+}
+body {
+    min-height: 100vh;
+    background-color: #f2f3f4 !important;
+    color: #6d6d6d;
+}
+
+
+.sidenav {
+    height: 100%;
+    width: 230px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #2f5f88;
+    overflow-x: hidden;
+}
+.sidenav .logoContainer {
+    padding: 42px 16px;
+}
+.sidenav .logoContainer img {
+    height: 32px;
+    margin-right: 14px;
+}
+.sidenav .logoContainer .brandName {
+    color: white;
+    font-size: 28px;
+    /* letter-spacing: 2px; */
+    margin-bottom: 0;
+    font-weight: 400;
+}
+.sidenav .orgContainer {
+    padding: 8px 16px;
+}
+.sidenav .orgContainer .badge {
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+.sidenav .menuContainer {
+    margin-top: 24px;
+}
+.sidenav .menuContainer .menuList {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.sidenav .menuContainer .menuList li {
+    padding: 14px 16px;
+}
+.sidenav .menuContainer .menuList li a {
+    color: #fff;
+    font-size: 16px;
+}
+.sidenav .menuContainer .menuList li a i {
+    width: 23px;
+}
+.sidenav .menuContainer .menuList li.active {
+    background-color: #000 3b;
+    border-right: 6px solid #669ccd;
+}
+.sidenav .sidebarBottom {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    padding-bottom: 16px;
+    padding-top: 19px;
+    background-color: #254b6e;
+    padding: 16px;
+}
+.sidenav .sidebarBottom .userDetails {
+    padding: 8px 0px;
+}
+.sidenav .sidebarBottom .userDetails a {
+    color: #fff;
+    font-size: 18px;
+}
+.sidenav .sidebarBottom .signOutLink {
+    padding: 8px 0px;
+}
+.sidenav .sidebarBottom .signOutLink a {
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+.sidenav .sidebarBottom .signOutLink a:hover {
+    text-decoration: underline;
+}
+.sidenav .sidebarBottom .lastLogin {
+    font-size: 12px;
+    color: #fff;
+}
+.main {
+    margin-left: 230px;
+}
+.header-section {
+    background-color: #fff;
+    padding: 24px 16px;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    position: sticky;
+}
+.header-section .title {
+    font-size: 22px;
+    color: grey;
+}
+.header-section .title .titleText {
+    font-weight: 400;
+}
+.header-section .creditsTitle {
+    font-size: 16px;
+}
+.header-section .credits .badge {
+    font-size: 18px;
+    display: block;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+.dropdown-toggle::after {
+    display: none;
+}
+.btn-round-icon {
+    position: relative;
+    outline: none;
+}
+.notificationButton {
+    height: 36px;
+    width: 36px;
+    padding: 0;
+    font-size: 16px;
+    background-color: white;
+}
+.notificationButton .badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 10px;
+}
+
+.dropdown-item-text {
+    color: #7f7f7f;
+}
+.profileDropdown {
+    margin: 8px 8px 0px 0px;
+    padding: 0px;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175) !important;
+    border: none;
+    border-radius: 0;
+}
+.profileDropdown .dropdown-item {
+    padding: 0.8rem 2.5rem 0.8rem 1.5rem;
+    font-size: 14px;
+    color: '#2f5f88';
+}
+.profileDropdown .dropdown-item:active {
+    background-color: white;
+}
+.profileDropdown .dropdown-divider {
+    margin: 0;
+}
+.profileDropdown .profileContainer {
+    padding: 18px 24px;
+    height: 60px;
+    background-color: #2f5f88;
+}
+.profileDropdown .profileContainer p {
+    margin-bottom: 0;
+    color: white;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+.pageContent {
+    padding: 36px 28px;
+}
+
+.btn-round-icon {
+    height: 36px;
+    width: 36px;
+    outline: none;
+    border-radius: 50%;
+    border: 2px solid #7f7f7f;
+    color: #7f7f7f;
+}
+
+.profile-button {
+    border-color: #2f5f88;
+    color: white;
+    background-color: #2f5f88;
+    font-weight: 400;
+}
+.actionColumn {
+    width: 50px;
+}
+
+.contentBox {
+    background-color: white;
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+    margin-bottom: 15px;
+    width: 100%
+   
+}
+
+.contentBox .contentHeader {
+    padding: 16px 24px;
+}
+.contentBox .contentBody {
+    padding: 16px 24px;
+}
