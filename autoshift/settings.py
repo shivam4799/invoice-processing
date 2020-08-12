@@ -28,7 +28,7 @@ SECRET_KEY = '^bob3(26$k-ofw@yk%-@nw+#h0nimah=)e4on5!_^8e6mk0drg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','immense-wave-70576.herokuapp.com/']
+ALLOWED_HOSTS = ['127.0.0.1','immense-wave-70576.herokuapp.com']
 
 
 
