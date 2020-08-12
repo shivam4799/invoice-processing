@@ -2,6 +2,7 @@
 
 
 {% block listinvoices %}
+    <div class="container-fluid">
 <table class="table table-bordered bg-white mt-4">
                         <thead>
                           <tr>
@@ -10,7 +11,7 @@
                             <th scope="col">GSTIN</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Status</th>
-                            <th scope="col" class="actionColumn">Action</th>
+                            <th scope="col" class="actionColumn" colspan="2">Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -23,11 +24,19 @@
                             <td>
                                 <span class="badge badge-success">Success</span>
                             </td>
-                            <td><a href="{% url 'detail' invoice.id %}">Detail</a> </td>
+                            <td>
+                                <div class="invoice-show-inline-block">
+                                    <div class="invoice-bar">
+                                <a href="{% url 'detail' invoice.id %}" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i></a>
+                                <a href="{% url 'update' invoice.id %}" class="btn btn-primary btn-sm "><i class="fa fa-edit"></i></a>
+                                <a href="{% url 'delete' invoice.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
+                                    </div>
+                                    </div>
+                            </td>
                           </tr>
                         {%endfor%}
 
                         </tbody>
                       </table>
-
+    </div>
 {% endblock %}

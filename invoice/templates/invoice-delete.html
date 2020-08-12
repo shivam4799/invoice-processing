@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block listinvoices %}
+<div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirm delete</h3>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <h4>
+                        Are you sure you want to delete: ?
+                    </h4>
+                    <div class="modal-footer">
+                        <input  class="btn btn-danger" type="submit" value="Yes, I want to delete" />
+
+                <input  class="btn btn-outline-secondary" type="submit" value="Cancel" onclick="goBack()" />
+            </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+{% endblock %}
