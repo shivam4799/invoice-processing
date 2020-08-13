@@ -38,7 +38,7 @@
                             <form id="api-form" action="{% url 'api' %}" method="post">
                                 {% csrf_token %}
 {#                                <input type="text" name="user_id" id="user_id" style="display: none" value="123">#}
-                                <buttonx type="submit" class="fill" style="float:right; margin: 5px" id="api-btn" data-toggle="modal" data-target="#loadMe" data-backdrop="static" data-keyboard="false">Autofill</buttonx>
+                                <button type="submit" class="fill api-call" style="float:right; margin: 5px" id="api-btn" data-toggle="modal" data-target="#loadMe" data-backdrop="static" data-keyboard="false">Autofill</button>
                             </form>
 
                                 <div class="mb-5">
@@ -436,7 +436,7 @@
 }
 
 
-buttonx{
+.api-call{
   position: relative;
   //display:block;
   height: 40px;
