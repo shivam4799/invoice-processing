@@ -1,8 +1,12 @@
 from django.db import models
 
 
-# Create your models here.
+class Document(models.Model):
+    pdf_copy = models.FileField(upload_to='', null=True, blank=True)
+
+
 class Invoice(models.Model):
+    document = models.ForeignKey(Document,on_delete=models.CASCADE,primary_key=False,null=True,blank=True)
     invoice_no = models.CharField(max_length=256)
     invoice_date = models.DateTimeField()
     gstin = models.PositiveIntegerField()
@@ -19,10 +23,6 @@ class Invoice(models.Model):
     status = models.BooleanField(null=True,blank=True)
     created_by = models.CharField(max_length=256)
     additional_data = models.CharField(max_length=10000,null=True,blank=True,default="")
-
-
-class Document(models.Model):
-    pdf_copy = models.FileField(upload_to='', null=True, blank=True)
 
 
 class Item(models.Model):

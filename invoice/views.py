@@ -40,7 +40,9 @@ class CreateForm(LoginRequiredMixin,CreateView):
         self.object = form.save()
         print('after saving ')
         print(self.request.POST)
-        form.instance.created_by = 'agent123'
+        path_file = Document.objects.filter().last()
+        form.instance.created_by = self.request.user.id
+        form.instance.document = path_file.id
         if self.request.POST.get('additional_data'):
             resp = json.loads(self.request.POST.get('additional_data'))
             invoice_id = resp['invoice_id']
@@ -72,6 +74,10 @@ class InvoiceList(LoginRequiredMixin,ListView):
     model = Invoice
     context_object_name = 'invoices'
 
+    def get_queryset(self):
+        qs = self.model.objects.filter(created_by=self.request.user.id)
+        return qs
+
 
 class InvoiceDetailView(LoginRequiredMixin,DetailView):
     login_url = '/auth/'
@@ -99,6 +105,9 @@ class InvoiceUpdateView(UpdateView,LoginRequiredMixin):
         print('in get context data')
         data = super(InvoiceUpdateView,self).get_context_data(**kwargs)
         path_file = Document.objects.filter().last()
+        # document_file = (Invoice.objects.filter(id=self.object.id))
+        # path_file = document_file.document
+        # path_file = path_file.pdf_copy
         data['items'] = Item.objects.filter(invoice=self.object)
         print(data['items'])
         pdf_file = str(path_file.pdf_copy).split('.')[0] +'.pdf'
@@ -207,7 +216,6 @@ def api_call(request):
     context = {}
     path_file = Document.objects.filter().last()
     pdf_file = str(path_file.pdf_copy).split('.')[0] + '.pdf'
-    print(pdf_file)
     context['pdf_file'] = pdf_file
 
     form = InvoicesForm()
@@ -233,7 +241,6 @@ def api_call(request):
     invoice_number = response['invoice_number']
     invoice_date = response['invoice_date']
     gstin = response['vendor_gstin']
-    print('gstin',gstin[0]['value'])
     vendor_address = response['state_code']
     total_amount = response['total_amount']
     sgst = response['sgsts']
@@ -251,13 +258,18 @@ def api_call(request):
     if total_amount:
         form.fields['total_amount'].initial = total_amount[0]['value']
     if sgst:
-        form.fields['sgst'].initial = sgst[0]['value']
+        # form.fields['sgst'].initial = sgst[0]['value']
+        pass
     if cgst:
-        form.fields['cgst'].initial = cgst[0]['value']
+        # form.fields['cgst'].initial = cgst[0]['value']
+        pass
     if igst:
-        form.fields['igst'].initial = igst[0]['value']
+        # form.fields['igst'].initial = igst[0]['value']
+        pass
     if total_taxable_amount:
         form.fields['total_taxable_amount'].initial = total_taxable_amount[0]['value']
+    if vendor_address:
+        form.fields['vendor_address'].initial = vendor_address[0]['value']
 
     context['form'] = form
 

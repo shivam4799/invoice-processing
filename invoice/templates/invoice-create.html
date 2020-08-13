@@ -3,6 +3,32 @@
 {% load static %}
 <br>
     {{ form.errors }}
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+            </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <div class="loader"></div>
+        <div clas="loader-txt">
+        <h6>Please Wait...</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="container-fluid">
                 <div class="row" id="first-row">
 
@@ -12,12 +38,8 @@
                             <form id="api-form" action="{% url 'api' %}" method="post">
                                 {% csrf_token %}
 {#                                <input type="text" name="user_id" id="user_id" style="display: none" value="123">#}
-                                <button type="submit" class="btn btn-success" style="float:right; margin: 5px" id="api-btn">Autofill</button>
+                                <buttonx type="submit" class="fill" style="float:right; margin: 5px" id="api-btn" data-toggle="modal" data-target="#loadMe" data-backdrop="static" data-keyboard="false">Autofill</buttonx>
                             </form>
-
-                            <a href="{% url 'home' %}" class="btn btn-primary" style="float:right; margin: 5px">Upload New document</a>
-
-
 
                                 <div class="mb-5">
                                     <h4>Invoice Details</h4>
@@ -64,56 +86,43 @@
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary btn-sm" type="button"
                                                     id="gstin" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                   <i class="fa fa-tag" aria-hidden="true" id="gstin-i"></i>
+                                                   <i class="fa fa-tag" id="gstin-i"></i>
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                 <div class="col-md-6">
-                                        <label for="exampleInputEmail1">CGST</label>
-                                        <div class="input-group mb-3">
-<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
-                                            {{ form.cgst }}
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="email" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fa fa-tag" id="email_i"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="exampleInputEmail1">SGST</label>
-                                        <div class="input-group mb-3">
-<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
-                                            {{ form.sgst }}
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="phone_number" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fa fa-tag" id="phone_number-i"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+{#                                 <div class="col-md-6">#}
+{#                                        <label for="exampleInputEmail1">CGST</label>#}
+{#                                        <div class="input-group mb-3">#}
+{#<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->#}
+{#                                            {{ form.cgst }}#}
+{#                                            <div class="input-group-append">#}
+{#                                                <button class="btn btn-outline-secondary btn-sm" type="button"#}
+{#                                                    id="email" data-toggle="popover" data-trigger="focus" data-content="Tagging active">#}
+{#                                                    <i class="fa fa-tag" id="email_i"></i>#}
+{#                                                </button>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="col-md-6">#}
+{#                                        <label for="exampleInputEmail1">SGST</label>#}
+{#                                        <div class="input-group mb-3">#}
+{#<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->#}
+{#                                            {{ form.sgst }}#}
+{#                                            <div class="input-group-append">#}
+{#                                                <button class="btn btn-outline-secondary btn-sm" type="button"#}
+{#                                                    id="phone_number" data-toggle="popover" data-trigger="focus" data-content="Tagging active">#}
+{#                                                    <i class="fa fa-tag" id="phone_number-i"></i>#}
+{#                                                </button>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
 
                                     </div>
 
                             <div class="row">
                                  <div class="col-md-6">
-                                        <label for="exampleInputEmail1">IGST</label>
-                                        <div class="input-group mb-3">
-<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
-                                            {{ form.igst }}
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="email" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fa fa-tag" id="email_i"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
                                         <label for="exampleInputEmail1">Total Taxable Amount</label>
                                         <div class="input-group mb-3">
 <!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
@@ -126,46 +135,42 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    </div>
-
-
-
-                                    <div>
+                                <div class="col-md-6">
                                         <label for="exampleInputEmail1">Total Amount</label>
                                         <div class="input-group mb-3">
 <!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
                                             {{ form.total_amount }}
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="vendor_address" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fa fa-tag" id="vendor_address-i"></i>
+                                                    id="email" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
+                                                    <i class="fa fa-tag" id="email_i"></i>
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
 
 
-                                <button id="a-href" class="btn btn-link">Add new item</button><br>
+                                    </div>
 
-                            <table class="table table-hover" id="item-table">
-                                <thead>
-                                <tr>
-                                    <td>item description</td>
-                                    <td>item quantity</td>
-                                    <td>item rate</td>
-                                    <td>action</td>
-                                </tr>
-                                {% for item in items %}
-                                    <td>{{ item.item_description }}</td>
-                                    <td>{{ item.item_quantity }}</td>
-                                    <td>{{ item.item_rate }}</td>
-                                {% endfor %}
-                                </thead>
-                            </table>
 
-                                    <br><br>
-                                <div class="mb-5">
+
+{#                                    <div>#}
+{#                                        <label for="exampleInputEmail1">Total Amount</label>#}
+{#                                        <div class="input-group mb-3">#}
+{#<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->#}
+{#                                            {{ form.total_amount }}#}
+{#                                            <div class="input-group-append">#}
+{#                                                <button class="btn btn-outline-secondary btn-sm" type="button"#}
+{#                                                    id="vendor_address" data-toggle="popover" data-trigger="focus" data-content="Tagging active">#}
+{#                                                    <i class="fa fa-tag" id="vendor_address-i"></i>#}
+{#                                                </button>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+
+
+
+                                <div class="mb-4">
                                     <h4>Vendor Details</h4>
                                 </div>
 
@@ -239,11 +244,30 @@
                                         </div>
                                     </div>
 
+                                    <button id="a-href" class="btn btn-link" type="button">Add new item</button><br>
+
+                            <table class="table table-hover" id="item-table">
+                                <thead>
+                                <tr>
+                                    <td>item description</td>
+                                    <td>item quantity</td>
+                                    <td>item rate</td>
+                                    <td>action</td>
+                                </tr>
+                                {% for item in items %}
+                                    <td>{{ item.item_description }}</td>
+                                    <td>{{ item.item_quantity }}</td>
+                                    <td>{{ item.item_rate }}</td>
+                                {% endfor %}
+                                </thead>
+                            </table>
+
+
 
 
 
                                     <button class="btn btn-primary" type="submit">Save</button>
-                                  <button class="btn btn-light" type="reset">Cancel</button>
+                                  <a class="btn btn-light" href="{% url 'home' %}">Cancel</a>
                                 </form>
                             </div>
                         </div>
@@ -299,8 +323,9 @@
                                         </div>
                                     </div>
 
-                                     <button class="btn btn-primary" type="submit" id="submit-of-items">Add</button>
-                                  <button class="btn btn-light" type="reset" id="clear-of-items">Cancel</button>
+
+                                     <button class="btn btn-primary" type="button" id="submit-of-items">Add</button>
+                                  <button class="btn btn-light" type="button" id="clear-of-items">Cancel</button>
 
 
                             </div>
@@ -309,29 +334,284 @@
 
                     <div class="col-md-6">
                         <div class="text-center">
-                            <button id="prev" class="btn btn-primary btn-sm">Previous</button>
-                            <button id="next" class="btn btn-primary btn-sm">Next</button>
-                            <button id="clear" class="btn btn-primary btn-sm">Clear</button>&nbsp;
+                            <button id="prev" class="btn btn-light btn-sm"><i class="fa fa-reply" aria-hidden="true"></i></button>
+                            <button id="next" class="btn btn-light btn-sm"><i class="fa fa-share" aria-hidden="true"></i></button>
+                            <button id="clear" class="btn btn-light btn-sm">Clear</button>&nbsp;
                             <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
                         </div>
-                    <div class="card pdf" id="pdf-card">
+                    <div class="card pdf" id="pdf-card" style="width: 600px; height: 900px">
                         <div class="mask flex-center rgba-red-strong">
-                            <canvas id="the-canvas" class="w-150"></canvas>
+                            <canvas id="the-canvas" style="object-fit: fill"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
 
 
-        </div>
-    </div>
+</div>
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/modal-loading.css' %}/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/modal-loading-animate.css' %}" />
+
 <style>
-    .fa-tag{
-        color: green;
+.fa-check{
+    color:green;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400);
+
+.button-wrap {
+  position: relative;
+  text-align: center;
+  .btn {
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.5);
+    border-radius: 0px;
+    border-color: #222;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 1.1em;
+    font-weight: 400;
+    letter-spacing: 1px;
+    small {
+      font-size: 0.8rem;
+      letter-spacing: normal;
+      text-transform: none;
     }
-    .fa-check{
-        color:green;
+  }
+}
+
+
+/** SPINNER CREATION **/
+
+.loader {
+  position: relative;
+  text-align: center;
+  margin: 15px auto 35px auto;
+  z-index: 9999;
+  display: block;
+  width: 80px;
+  height: 80px;
+  border: 10px solid rgba(0, 0, 0, .3);
+  border-radius: 50%;
+  border-top-color: #000;
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+
+/** MODAL STYLING **/
+
+.modal-content {
+  border-radius: 0px;
+  box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.7);
+}
+
+.modal-backdrop.show {
+  opacity: 0.75;
+}
+
+.loader-txt {
+  p {
+    font-size: 13px;
+    color: #666;
+    small {
+      font-size: 11.5px;
+      color: #999;
     }
+  }
+}
+
+
+buttonx{
+  position: relative;
+  //display:block;
+  height: 40px;
+  width: 100px;
+  padding: 7px 14px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #383736;
+  border: 2px #383736 solid;
+  border-radius: 4px;
+  text-transform: uppercase;
+  outline: 0;
+  overflow:hidden;
+  background: none;
+  z-index: 1;
+  cursor: pointer;
+  transition:         0.08s ease-in;
+  -o-transition:      0.08s ease-in;
+  -ms-transition:     0.08s ease-in;
+  -moz-transition:    0.08s ease-in;
+  -webkit-transition: 0.08s ease-in;
+}
+
+.fill:hover {
+  color: whitesmoke;
+}
+
+.fill:before {
+  content: "";
+  position: absolute;
+  background: #2f5f88;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: -1;
+  -webkit-transition: top 0.09s ease-in;
+}
+
+.fill:hover:before {
+  top: 0;
+}
+
+.fade:before{
+  content:"→";
+  position:absolute;
+  color:darkslateblue;
+  left: 88%;
+  opacity: 0;
+  -webkit-transition: all 0.2s ease-in;
+}
+
+.fade:hover:before{
+  left:91%;
+  opacity:1;
+}
+
+.fade:hover {
+  border: 0px #fff solid;
+  -webkit-transform: scale(1.04,1.04);
+  -webkit-transition: border 0.3s ease-out;
+  -webkit-transition: transform 250ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+.arrow{
+  text-align:left;
+  padding-left:17px;
+}
+
+.arrow:before{
+  content:"→";
+  position:absolute;
+  color:#383736;
+  left: 83%;
+  opacity: 0;
+  -webkit-transition: all 250ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+.arrow:hover:before{
+  left:84%;
+  opacity:1;
+}
+
+.arrow:hover {
+  width:170px;
+}
+
+
+.slide:after{
+  content:"View Story";
+  position:absolute;
+  width:100%;
+  height:100%;
+  left:0;
+  text-align:center;
+  -webkit-transition: all 400ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+.slide:before {
+  content:"Read it →";
+  height:100%;
+  width:100%;
+  position:absolute;
+  color:#383736;
+  left:-100%;
+  opacity: 0;
+  -webkit-transition: all 500ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+.slide:hover{
+  background:#383736;
+}
+
+.slide:hover:before{
+  left:0;
+  opacity:1;
+  color:#fff;
+}
+.slide:hover:after{
+  left:100%;
+  opacity:0;
+}
+
+.slide.left:hover{
+  background:none;
+}
+
+.slide.left:before {
+  left:100%;
+  color:#383736;
+  -webkit-transition: all 425ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+.slide.left:hover:before{
+  left:0;
+}
+
+.svg{
+  -webkit-transition: all 150ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+}
+
+.svg:before{
+  position:absolute;
+  content:"";
+  background: url(https://f.cl.ly/items/3H3A0D1N281a2T280F3o/heist.svg) no-repeat center center;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  z-index:-1;
+  opacity:0;
+  -webkit-transition: all 250ms cubic-bezier(0.230, 1.000, 0.320, 1.000);
+}
+
+.svg:after {
+  content: "";
+  position: absolute;
+  background: #d19b26;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: -2;
+  -webkit-transition: all 250ms cubic-bezier(0.230, 1.000, 0.320, 1.000);
+}
+.svg:hover{
+  color:white;
+  border: 0px #d19b26 solid;
+}
+.svg:hover:before {
+  opacity: .8;
+}
+.svg:hover:after {
+  top: 0;
+}
 </style>
 
 <script type="text/javascript" src="{% static 'js/annotorious.min.js' %}"></script>
@@ -340,11 +620,23 @@
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+<script src="{% static 'js/modal-loading.js' %}"></script>
 <script>
 $('#api-btn').click(function () {
     console.log('button clicked')
 })
+</script>
+
+<script>
+        function loadingOut(loading) {
+				setTimeout(() => loading.out(), 3000);
+			}
+
+			function normal() {
+				var loading = new Loading();
+
+				loadingOut(loading);
+			}
 </script>
 
 <script>
@@ -418,6 +710,7 @@ $('#submit-of-items').click(function () {
 // script for rendering pdf
     // also adds the annotator.js
     console.log('rendering')
+    //var url = 'sjsdfijikjdik'
     var url = '{{ pdf_file }}'
     console.log('pdf','{{ pdf_file }}')
         // Loaded via <script> tag, create shortcut to access PDF.js exports.
@@ -432,7 +725,7 @@ $('#submit-of-items').click(function () {
             pageNum = 1,
             pageRendering = false,
             pageNumPending = null,
-            scale = 1,
+            scale = 0.6,
             canvas = document.getElementById('the-canvas'),
             ctx = canvas.getContext('2d'),
             values = [],
@@ -442,14 +735,37 @@ $('#submit-of-items').click(function () {
          * Get page info from document, resize canvas accordingly, and render page.
          * @param num Page number.
          */
+         console.log('height',canvas.height)
+        console.log('width',canvas.width)
+        console.log('ctx',ctx)
         console.log(values)
         function renderPage(num) {
             pageRendering = true;
             // Using promise to fetch the page
             pdfDoc.getPage(num).then(function (page) {
+                var tempView = page.getViewport({scale:1});
+                console.log('original',tempView.width)
+                Wscale = canvas.width/tempView.width
+                console.log('width',Wscale)
+
+                canvas_area = canvas.height * canvas.width
+                console.log('canvas_area',canvas_area)
+                pdf_area = tempView.height * tempView.width
+                console.log('pdf_area',pdf_area)
+
+                Hscale = canvas.height/tempView.height
+
+                if(Wscale>=0.7){
+                    scale=0.9
+                }
                 var viewport = page.getViewport({ scale: scale });
+
+                console.log('scaling',parseFloat(canvas.width) / parseFloat(viewport.width))
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
+                //viewport.height = 1000;
+                console.log(viewport.height)
+                console.log(viewport.width)
 
                 // Render PDF page into canvas context
                 var renderContext = {
