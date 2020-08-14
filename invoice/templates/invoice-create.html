@@ -267,7 +267,7 @@
 
 
                                     <button class="btn btn-primary" type="submit">Save</button>
-                                  <a class="btn btn-light" href="{% url 'home' %}">Cancel</a>
+                                  <a href="{% url 'home' %}" class="btn btn-light">Cancel</a>
                                 </form>
                             </div>
                         </div>
@@ -332,19 +332,22 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <div class="text-center">
-                            <button id="prev" class="btn btn-light btn-sm"><i class="fa fa-reply" aria-hidden="true"></i></button>
-                            <button id="next" class="btn btn-light btn-sm"><i class="fa fa-share" aria-hidden="true"></i></button>
-                            <button id="clear" class="btn btn-light btn-sm">Clear</button>&nbsp;
-                            <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
-                        </div>
+                <div class="col-md-6">
                     <div class="card pdf" id="pdf-card" style="width: 600px; height: 900px">
-                        <div class="mask flex-center rgba-red-strong">
-                            <canvas id="the-canvas" style="object-fit: fill"></canvas>
+                        <nav class="navbar navbar-dark bg-dark shadow-lg">
+                            <div class="text-center col-md">
+                                <button id="prev" class="btn btn-dark btn-sm"><i class="fa fa-reply" aria-hidden="true"></i></button>
+                                <button id="next" class="btn btn-dark btn-sm"><i class="fa fa-share" aria-hidden="true"></i></button>
+                                <button id="zoom-in" class="btn btn-dark btn-sm"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
+                                <button id="zoom-out" class="btn btn-dark btn-sm"><i class="fa fa-search-minus" aria-hidden="true"></i></button>
+
+                                <button id="clear" class="btn btn-dark btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button>&nbsp;
+                                <span style="color: white;">Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+                            </div>
+                        </nav>
+                           <canvas id="the-canvas" class="col-md"></canvas>
                         </div>
                     </div>
-                </div>
             </div>
 
 
@@ -353,265 +356,9 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/modal-loading.css' %}/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/modal-loading-animate.css' %}" />
-
+<link rel="stylesheet" type="text/css" href="{% static 'css/viewer.css' %}"/>
 <style>
-.fa-check{
-    color:green;
-}
 
-@import url(https://fonts.googleapis.com/css?family=Roboto:300,400);
-
-.button-wrap {
-  position: relative;
-  text-align: center;
-  .btn {
-    font-family: 'Roboto', sans-serif;
-    box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.5);
-    border-radius: 0px;
-    border-color: #222;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-size: 1.1em;
-    font-weight: 400;
-    letter-spacing: 1px;
-    small {
-      font-size: 0.8rem;
-      letter-spacing: normal;
-      text-transform: none;
-    }
-  }
-}
-
-
-/** SPINNER CREATION **/
-
-.loader {
-  position: relative;
-  text-align: center;
-  margin: 15px auto 35px auto;
-  z-index: 9999;
-  display: block;
-  width: 80px;
-  height: 80px;
-  border: 10px solid rgba(0, 0, 0, .3);
-  border-radius: 50%;
-  border-top-color: #000;
-  animation: spin 1s ease-in-out infinite;
-  -webkit-animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-  to {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@-webkit-keyframes spin {
-  to {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-
-/** MODAL STYLING **/
-
-.modal-content {
-  border-radius: 0px;
-  box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.7);
-}
-
-.modal-backdrop.show {
-  opacity: 0.75;
-}
-
-.loader-txt {
-  p {
-    font-size: 13px;
-    color: #666;
-    small {
-      font-size: 11.5px;
-      color: #999;
-    }
-  }
-}
-
-
-.api-call{
-  position: relative;
-  //display:block;
-  height: 40px;
-  width: 100px;
-  padding: 7px 14px;
-  font-weight: 700;
-  font-size: 15px;
-  color: #383736;
-  border: 2px #383736 solid;
-  border-radius: 4px;
-  text-transform: uppercase;
-  outline: 0;
-  overflow:hidden;
-  background: none;
-  z-index: 1;
-  cursor: pointer;
-  transition:         0.08s ease-in;
-  -o-transition:      0.08s ease-in;
-  -ms-transition:     0.08s ease-in;
-  -moz-transition:    0.08s ease-in;
-  -webkit-transition: 0.08s ease-in;
-}
-
-.fill:hover {
-  color: whitesmoke;
-}
-
-.fill:before {
-  content: "";
-  position: absolute;
-  background: #2f5f88;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 100%;
-  z-index: -1;
-  -webkit-transition: top 0.09s ease-in;
-}
-
-.fill:hover:before {
-  top: 0;
-}
-
-.fade:before{
-  content:"→";
-  position:absolute;
-  color:darkslateblue;
-  left: 88%;
-  opacity: 0;
-  -webkit-transition: all 0.2s ease-in;
-}
-
-.fade:hover:before{
-  left:91%;
-  opacity:1;
-}
-
-.fade:hover {
-  border: 0px #fff solid;
-  -webkit-transform: scale(1.04,1.04);
-  -webkit-transition: border 0.3s ease-out;
-  -webkit-transition: transform 250ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
-}
-
-.arrow{
-  text-align:left;
-  padding-left:17px;
-}
-
-.arrow:before{
-  content:"→";
-  position:absolute;
-  color:#383736;
-  left: 83%;
-  opacity: 0;
-  -webkit-transition: all 250ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
-}
-
-.arrow:hover:before{
-  left:84%;
-  opacity:1;
-}
-
-.arrow:hover {
-  width:170px;
-}
-
-
-.slide:after{
-  content:"View Story";
-  position:absolute;
-  width:100%;
-  height:100%;
-  left:0;
-  text-align:center;
-  -webkit-transition: all 400ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
-}
-
-.slide:before {
-  content:"Read it →";
-  height:100%;
-  width:100%;
-  position:absolute;
-  color:#383736;
-  left:-100%;
-  opacity: 0;
-  -webkit-transition: all 500ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
-}
-
-.slide:hover{
-  background:#383736;
-}
-
-.slide:hover:before{
-  left:0;
-  opacity:1;
-  color:#fff;
-}
-.slide:hover:after{
-  left:100%;
-  opacity:0;
-}
-
-.slide.left:hover{
-  background:none;
-}
-
-.slide.left:before {
-  left:100%;
-  color:#383736;
-  -webkit-transition: all 425ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
-}
-
-.slide.left:hover:before{
-  left:0;
-}
-
-.svg{
-  -webkit-transition: all 150ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
-}
-
-.svg:before{
-  position:absolute;
-  content:"";
-  background: url(https://f.cl.ly/items/3H3A0D1N281a2T280F3o/heist.svg) no-repeat center center;
-  width:100%;
-  height:100%;
-  top:0;
-  left:0;
-  z-index:-1;
-  opacity:0;
-  -webkit-transition: all 250ms cubic-bezier(0.230, 1.000, 0.320, 1.000);
-}
-
-.svg:after {
-  content: "";
-  position: absolute;
-  background: #d19b26;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 100%;
-  z-index: -2;
-  -webkit-transition: all 250ms cubic-bezier(0.230, 1.000, 0.320, 1.000);
-}
-.svg:hover{
-  color:white;
-  border: 0px #d19b26 solid;
-}
-.svg:hover:before {
-  opacity: .8;
-}
-.svg:hover:after {
-  top: 0;
-}
 </style>
 
 <script type="text/javascript" src="{% static 'js/annotorious.min.js' %}"></script>
@@ -662,7 +409,7 @@ function addrow(name,quantity,rate){
     cell1.innerText = name;
     cell2.innerText = quantity;
     cell3.innerText = rate;
-    cell4.innerHTML = "<input type='button' value='delete' class='btn btn-danger btn-sm' onclick='SomeDeleteRowFunction(this)'/>"
+    cell4.innerHTML = "<button type='button' value='delete' class='btn btn-light btn-sm'  onclick='SomeDeleteRowFunction(this)'><i class='fa fa-trash'></i> </button>"
 }
 
 function SomeDeleteRowFunction(o) {
@@ -710,7 +457,7 @@ $('#submit-of-items').click(function () {
 // script for rendering pdf
     // also adds the annotator.js
     console.log('rendering')
-    //var url = 'sjsdfijikjdik'
+
     var url = '{{ pdf_file }}'
     console.log('pdf','{{ pdf_file }}')
         // Loaded via <script> tag, create shortcut to access PDF.js exports.
@@ -725,7 +472,7 @@ $('#submit-of-items').click(function () {
             pageNum = 1,
             pageRendering = false,
             pageNumPending = null,
-            scale = 0.6,
+            scale = 1,
             canvas = document.getElementById('the-canvas'),
             ctx = canvas.getContext('2d'),
             values = [],
@@ -743,35 +490,17 @@ $('#submit-of-items').click(function () {
             pageRendering = true;
             // Using promise to fetch the page
             pdfDoc.getPage(num).then(function (page) {
-                var tempView = page.getViewport({scale:1});
-                console.log('original',tempView.width)
-                Wscale = canvas.width/tempView.width
-                console.log('width',Wscale)
-
-                canvas_area = canvas.height * canvas.width
-                console.log('canvas_area',canvas_area)
-                pdf_area = tempView.height * tempView.width
-                console.log('pdf_area',pdf_area)
-
-                Hscale = canvas.height/tempView.height
-
-                if(Wscale>=0.7){
-                    scale=0.9
-                }
                 var viewport = page.getViewport({ scale: scale });
 
                 console.log('scaling',parseFloat(canvas.width) / parseFloat(viewport.width))
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
-                //viewport.height = 1000;
-                console.log(viewport.height)
-                console.log(viewport.width)
 
-                // Render PDF page into canvas context
                 var renderContext = {
                     canvasContext: ctx,
                     viewport: viewport
                 };
+
                 anno = newannote()
                 var renderTask = page.render(renderContext);
 
@@ -845,8 +574,23 @@ $('#submit-of-items').click(function () {
             document.getElementById('page_count').textContent = pdfDoc.numPages;
 
             // Initial/first page rendering
-            renderPage(pageNum);
+            queueRenderPage(pageNum);
         });
+
+        var zoominbutton = document.getElementById("zoom-in");
+         zoominbutton.onclick = function() {
+            scale = scale + 0.25;
+            queueRenderPage(pageNum);
+         }
+
+         var zoomoutbutton = document.getElementById("zoom-out");
+         zoomoutbutton.onclick = function() {
+            if (scale <= 0.25) {
+               return;
+            }
+            scale = scale - 0.25;
+            renderPage(pageNum);
+         }
 
         function call(global_id_tag,vals) {
             if(global_id_tag){

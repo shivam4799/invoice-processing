@@ -88,12 +88,12 @@
                         <button class="btn-round-icon notificationButton mr-2"><i class="fas fa-bell"></i>
                         </button>
 
-                        <button type="button"
-                        class="btn-round-icon profile-button ml-2" >
-
-                    </button>
-                        <a href="{% url 'logout' %}" class="btn btn-warning btn-sm" style="margin: 5px">Logout </a>
-                    </div>
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                        <button class="btn-round-icon notificationButton mr-2"><i class="fas fa-sign-out-alt"></i>
+                        </button>
+                        </form>
+                         </div>
                     </div>
                 </div>
         </section>
