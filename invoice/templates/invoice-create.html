@@ -1,250 +1,263 @@
 {% extends 'base.html' %}
 {% block listinvoices %}
-{% load static %}
-<br>
+    {% load static %}
+    <br>
     {{ form.errors }}
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+
+                </div>
             </div>
-
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-      <div class="modal-body text-center">
-        <div class="loader"></div>
-        <div clas="loader-txt">
-        <h6>Please Wait...</h6>
         </div>
-      </div>
     </div>
-  </div>
-</div>
-<div class="container-fluid">
-                <div class="row" id="first-row">
 
-                    <div class="col-md-6" id="invoice-card">
-                        <div class="card">
-                            <div class="card-body">
-                            <form id="api-form" action="{% url 'api' %}" method="post">
-                                {% csrf_token %}
-{#                                <input type="text" name="user_id" id="user_id" style="display: none" value="123">#}
-                                <button type="submit" class="fill api-call" style="float:right; margin: 5px" id="api-btn" data-toggle="modal" data-target="#loadMe" data-backdrop="static" data-keyboard="false">Autofill</button>
-                            </form>
+    <div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="loader"></div>
+                    <div clas="loader-txt">
+                        <h6>Please Wait...</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row" id="first-row">
 
-                                <div class="mb-5">
-                                    <h4>Invoice Details</h4>
+            <div class="col-md-6" id="invoice-card">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="api-form" action="{% url 'api' %}" method="post">
+                            {% csrf_token %}
+                            {#                                <input type="text" name="user_id" id="user_id" style="display: none" value="123">#}
+                            <button type="submit" class="fill api-call" style="float:right; margin: 5px" id="api-btn"
+                                    data-toggle="modal" data-target="#loadMe" data-backdrop="static"
+                                    data-keyboard="false">Autofill
+                            </button>
+                        </form>
+
+                        <div class="mb-5">
+                            <h4>Invoice Details</h4>
+                        </div>
+
+                        <form action="{% url 'create' %}" method="post" id="invoice-form">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label for="exampleInputEmail1">Invoice No / Bill No</label>
+                                    <div class="input-group mb-3">
+                                        <!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
+                                        {{ form.invoice_no }}
+                                        {{ form.additional_data }}
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                    id="invoice_no" data-toggle="popover" data-trigger="focus"
+                                                    data-content="Tagging active">
+                                                <i class="fa fa-tag" id="invoice_no-i"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <form action="{% url 'create' %}" method="post" id="invoice-form">
-                                    {% csrf_token %}
-                                    <div class="row">
-                                    <div class="col-md-8">
-                                        <label for="exampleInputEmail1">Invoice No / Bill No</label>
-                                        <div class="input-group mb-3">
-<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
-                                            {{ form.invoice_no }}
-                                            {{ form.additional_data }}
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="invoice_no" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fa fa-tag" id="invoice_no-i"></i>
-                                                </button>
-                                            </div>
+                                <div class="col-md-4">
+                                    <label for="exampleInputEmail1">Invoice Date</label>
+                                    <div class="input-group mb-3">
+                                        <!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
+                                        {{ form.invoice_date }}
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                    id="invoice_date" data-toggle="popover" data-trigger="focus"
+                                                    data-content="Tagging active">
+                                                <i class="fa fa-tag" id="invoice_date-i"></i>
+                                            </button>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
 
-                                    <div class="col-md-4">
-                                        <label for="exampleInputEmail1">Invoice Date</label>
-                                        <div class="input-group mb-3">
-<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
-                                            {{ form.invoice_date }}
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="invoice_date" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fa fa-tag" id="invoice_date-i"></i>
-                                                </button>
-                                            </div>
-                                        </div>
+                            <div>
+                                <label for="exampleInputEmail1">GSTIN</label>
+                                <div class="input-group mb-3">
+                                    <!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
+                                    {{ form.gstin }}
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                id="gstin" data-toggle="popover" data-trigger="focus"
+                                                data-content="Tagging active">
+                                            <i class="fa fa-tag" id="gstin-i"></i>
+                                        </button>
                                     </div>
-                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                {#                                 <div class="col-md-6">#}
+                                {#                                        <label for="exampleInputEmail1">CGST</label>#}
+                                {#                                        <div class="input-group mb-3">#}
+                                {#<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->#}
+                                {#                                            {{ form.cgst }}#}
+                                {#                                            <div class="input-group-append">#}
+                                {#                                                <button class="btn btn-outline-secondary btn-sm" type="button"#}
+                                {#                                                    id="email" data-toggle="popover" data-trigger="focus" data-content="Tagging active">#}
+                                {#                                                    <i class="fa fa-tag" id="email_i"></i>#}
+                                {#                                                </button>#}
+                                {#                                            </div>#}
+                                {#                                        </div>#}
+                                {#                                    </div>#}
+                                {#                                    <div class="col-md-6">#}
+                                {#                                        <label for="exampleInputEmail1">SGST</label>#}
+                                {#                                        <div class="input-group mb-3">#}
+                                {#<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->#}
+                                {#                                            {{ form.sgst }}#}
+                                {#                                            <div class="input-group-append">#}
+                                {#                                                <button class="btn btn-outline-secondary btn-sm" type="button"#}
+                                {#                                                    id="phone_number" data-toggle="popover" data-trigger="focus" data-content="Tagging active">#}
+                                {#                                                    <i class="fa fa-tag" id="phone_number-i"></i>#}
+                                {#                                                </button>#}
+                                {#                                            </div>#}
+                                {#                                        </div>#}
+                                {#                                    </div>#}
 
-                                    <div>
-                                        <label for="exampleInputEmail1">GSTIN</label>
-                                        <div class="input-group mb-3">
-<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
-                                            {{ form.gstin }}
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="gstin" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                   <i class="fa fa-tag" id="gstin-i"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-{#                                 <div class="col-md-6">#}
-{#                                        <label for="exampleInputEmail1">CGST</label>#}
-{#                                        <div class="input-group mb-3">#}
-{#<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->#}
-{#                                            {{ form.cgst }}#}
-{#                                            <div class="input-group-append">#}
-{#                                                <button class="btn btn-outline-secondary btn-sm" type="button"#}
-{#                                                    id="email" data-toggle="popover" data-trigger="focus" data-content="Tagging active">#}
-{#                                                    <i class="fa fa-tag" id="email_i"></i>#}
-{#                                                </button>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                    <div class="col-md-6">#}
-{#                                        <label for="exampleInputEmail1">SGST</label>#}
-{#                                        <div class="input-group mb-3">#}
-{#<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->#}
-{#                                            {{ form.sgst }}#}
-{#                                            <div class="input-group-append">#}
-{#                                                <button class="btn btn-outline-secondary btn-sm" type="button"#}
-{#                                                    id="phone_number" data-toggle="popover" data-trigger="focus" data-content="Tagging active">#}
-{#                                                    <i class="fa fa-tag" id="phone_number-i"></i>#}
-{#                                                </button>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-
-                                    </div>
+                            </div>
 
                             <div class="row">
-                                 <div class="col-md-6">
-                                        <label for="exampleInputEmail1">Total Taxable Amount</label>
-                                        <div class="input-group mb-3">
-<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
-                                            {{ form.total_taxable_amount }}
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="phone_number" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fa fa-tag" id="phone_number-i"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
                                 <div class="col-md-6">
-                                        <label for="exampleInputEmail1">Total Amount</label>
-                                        <div class="input-group mb-3">
-<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
-                                            {{ form.total_amount }}
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="email" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fa fa-tag" id="email_i"></i>
-                                                </button>
-                                            </div>
+                                    <label for="exampleInputEmail1">Total Taxable Amount</label>
+                                    <div class="input-group mb-3">
+                                        <!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
+                                        {{ form.total_taxable_amount }}
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                    id="phone_number" data-toggle="popover" data-trigger="focus"
+                                                    data-content="Tagging active">
+                                                <i class="fa fa-tag" id="phone_number-i"></i>
+                                            </button>
                                         </div>
                                     </div>
-
-
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="exampleInputEmail1">Total Amount</label>
+                                    <div class="input-group mb-3">
+                                        <!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
+                                        {{ form.total_amount }}
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                    id="email" data-toggle="popover" data-trigger="focus"
+                                                    data-content="Tagging active">
+                                                <i class="fa fa-tag" id="email_i"></i>
+                                            </button>
+                                        </div>
                                     </div>
-
-
-
-{#                                    <div>#}
-{#                                        <label for="exampleInputEmail1">Total Amount</label>#}
-{#                                        <div class="input-group mb-3">#}
-{#<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->#}
-{#                                            {{ form.total_amount }}#}
-{#                                            <div class="input-group-append">#}
-{#                                                <button class="btn btn-outline-secondary btn-sm" type="button"#}
-{#                                                    id="vendor_address" data-toggle="popover" data-trigger="focus" data-content="Tagging active">#}
-{#                                                    <i class="fa fa-tag" id="vendor_address-i"></i>#}
-{#                                                </button>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-
-
-
-                                <div class="mb-4">
-                                    <h4>Vendor Details</h4>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="exampleInputEmail1">Email</label>
-                                        <div class="input-group mb-3">
-<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
-                                            {{ form.email }}
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="email" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fa fa-tag" id="email_i"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="exampleInputEmail1">Phone Number</label>
-                                        <div class="input-group mb-3">
-<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
-                                            {{ form.phone_number }}
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="phone_number" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fa fa-tag" id="phone_number-i"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    </div>
-                                    <div>
-                                        <label class="bold">IMEI</label>
-                                        <div class="input-group mb-3">
-<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
-                                            {{ form.imei }}
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="imei" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fa fa-tag" id="imei-i"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label for="exampleInputEmail1">Vendor Name</label>
-                                        <div class="input-group mb-3">
-<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
-                                            {{ form.vendor_name }}
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="vendor_name" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fa fa-tag" id="vendor_name-i"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                            </div>
 
-                                    <div>
-                                        <label for="exampleInputEmail1">Vendor State Code</label>
-                                        <div class="input-group mb-3">
-<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
-                                            {{ form.vendor_address }}
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="vendor_address" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fa fa-tag" id="vendor_address-i"></i>
-                                                </button>
-                                            </div>
+
+                            {#                                    <div>#}
+                            {#                                        <label for="exampleInputEmail1">Total Amount</label>#}
+                            {#                                        <div class="input-group mb-3">#}
+                            {#<!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->#}
+                            {#                                            {{ form.total_amount }}#}
+                            {#                                            <div class="input-group-append">#}
+                            {#                                                <button class="btn btn-outline-secondary btn-sm" type="button"#}
+                            {#                                                    id="vendor_address" data-toggle="popover" data-trigger="focus" data-content="Tagging active">#}
+                            {#                                                    <i class="fa fa-tag" id="vendor_address-i"></i>#}
+                            {#                                                </button>#}
+                            {#                                            </div>#}
+                            {#                                        </div>#}
+                            {#                                    </div>#}
+
+
+                            <div class="mb-4">
+                                <h4>Vendor Details</h4>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="exampleInputEmail1">Email</label>
+                                    <div class="input-group mb-3">
+                                        <!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
+                                        {{ form.email }}
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                    id="email" data-toggle="popover" data-trigger="focus"
+                                                    data-content="Tagging active">
+                                                <i class="fa fa-tag" id="email_i"></i>
+                                            </button>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="exampleInputEmail1">Phone Number</label>
+                                    <div class="input-group mb-3">
+                                        <!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
+                                        {{ form.phone_number }}
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                    id="phone_number" data-toggle="popover" data-trigger="focus"
+                                                    data-content="Tagging active">
+                                                <i class="fa fa-tag" id="phone_number-i"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                    <button id="a-href" class="btn btn-link" type="button">Add new item</button><br>
+                            </div>
+                            <div>
+                                <label class="bold">IMEI</label>
+                                <div class="input-group mb-3">
+                                    <!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
+                                    {{ form.imei }}
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                id="imei" data-toggle="popover" data-trigger="focus"
+                                                data-content="Tagging active">
+                                            <i class="fa fa-tag" id="imei-i"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="exampleInputEmail1">Vendor Name</label>
+                                <div class="input-group mb-3">
+                                    <!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
+                                    {{ form.vendor_name }}
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                id="vendor_name" data-toggle="popover" data-trigger="focus"
+                                                data-content="Tagging active">
+                                            <i class="fa fa-tag" id="vendor_name-i"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="exampleInputEmail1">Vendor State Code</label>
+                                <div class="input-group mb-3">
+                                    <!--                                            <input type="text" class="form-control form-control-sm" placeholder="">-->
+                                    {{ form.vendor_address }}
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                id="vendor_address" data-toggle="popover" data-trigger="focus"
+                                                data-content="Tagging active">
+                                            <i class="fa fa-tag" id="vendor_address-i"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button id="a-href" class="btn btn-link" type="button">Add new item</button>
+                            <br>
 
                             <table class="table table-hover" id="item-table">
                                 <thead>
@@ -263,203 +276,212 @@
                             </table>
 
 
-
-
-
-                                    <button class="btn btn-primary" type="submit">Save</button>
-                                  <a href="{% url 'home' %}" class="btn btn-light">Cancel</a>
-                                </form>
-                            </div>
-                        </div>
+                            <button class="btn btn-primary" type="submit">Save</button>
+                            <a href="{% url 'home' %}" class="btn btn-light">Cancel</a>
+                        </form>
                     </div>
-
-                    <div class="col-md-6" id="invoice2-card" style="display: none">
-                        <div class="card" >
-                            <div class="card-body">
-
-                                <div class="mb-5">
-                                    <h4>Item Details</h4>
-                                </div>
-                                    <div class="row">
-                                    <div class="col-md-8">
-                                        <label for="exampleInputEmail1">Item Description</label>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control form-control-sm" placeholder="" required id="item_name_input" value="">
-
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="item_name" data-toggle="popover" data-trigger="focus" data-content="Tagging active" value="">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <label for="exampleInputEmail1">Item Quantity</label>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control form-control-sm" placeholder="" required id="item_name_quantity" value="">
-
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="item_q" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    </div>
-
-                                    <div>
-                                        <label for="exampleInputEmail1">Item Rate</label>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control form-control-sm" placeholder="" required id="item_name_rate">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="item_r" data-toggle="popover" data-trigger="focus" data-content="Tagging active">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                     <button class="btn btn-primary" type="button" id="submit-of-items">Add</button>
-                                  <button class="btn btn-light" type="button" id="clear-of-items">Cancel</button>
-
-
-                            </div>
-                        </div>
-                    </div>
-
-                <div class="col-md-6">
-                    <div class="card pdf" id="pdf-card" style="width: 600px; height: 900px">
-                        <nav class="navbar navbar-dark bg-dark shadow-lg">
-                            <div class="text-center col-md">
-                                <button id="prev" class="btn btn-dark btn-sm"><i class="fa fa-reply" aria-hidden="true"></i></button>
-                                <button id="next" class="btn btn-dark btn-sm"><i class="fa fa-share" aria-hidden="true"></i></button>
-                                <button id="zoom-in" class="btn btn-dark btn-sm"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
-                                <button id="zoom-out" class="btn btn-dark btn-sm"><i class="fa fa-search-minus" aria-hidden="true"></i></button>
-
-                                <button id="clear" class="btn btn-dark btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button>&nbsp;
-                                <span style="color: white;">Page: <span id="page_num"></span> / <span id="page_count"></span></span>
-                            </div>
-                        </nav>
-                           <canvas id="the-canvas" class="col-md"></canvas>
-                        </div>
-                    </div>
+                </div>
             </div>
 
+            <div class="col-md-6" id="invoice2-card" style="display: none">
+                <div class="card">
+                    <div class="card-body">
 
-</div>
+                        <div class="mb-5">
+                            <h4>Item Details</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label for="exampleInputEmail1">Item Description</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control form-control-sm" placeholder="" required
+                                           id="item_name_input" value="">
+
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                id="item_name" data-toggle="popover" data-trigger="focus"
+                                                data-content="Tagging active" value="">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="exampleInputEmail1">Item Quantity</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control form-control-sm" placeholder="" required
+                                           id="item_name_quantity" value="">
+
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                id="item_q" data-toggle="popover" data-trigger="focus"
+                                                data-content="Tagging active">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="exampleInputEmail1">Item Rate</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control form-control-sm" placeholder="" required
+                                       id="item_name_rate">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary btn-sm" type="button"
+                                            id="item_r" data-toggle="popover" data-trigger="focus"
+                                            data-content="Tagging active">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
 
-<link rel="stylesheet" type="text/css" href="{% static 'css/modal-loading.css' %}/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/modal-loading-animate.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/viewer.css' %}"/>
-<style>
+                        <button class="btn btn-primary" type="button" id="submit-of-items">Add</button>
+                        <button class="btn btn-light" type="button" id="clear-of-items">Cancel</button>
 
-</style>
 
-<script type="text/javascript" src="{% static 'js/annotorious.min.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="{% static 'js/modal-loading.js' %}"></script>
-<script>
-$('#api-btn').click(function () {
-    console.log('button clicked')
-})
-</script>
+                    </div>
+                </div>
+            </div>
 
-<script>
+            <div class="col-md-6">
+                <div class="card pdf" id="pdf-card" style="width: 600px; height: 900px">
+                    <nav class="navbar navbar-dark bg-dark shadow-lg">
+                        <div class="text-center col-md">
+                            <button id="prev" class="btn btn-dark btn-sm"><i class="fa fa-reply" aria-hidden="true"></i>
+                            </button>
+                            <button id="next" class="btn btn-dark btn-sm"><i class="fa fa-share" aria-hidden="true"></i>
+                            </button>
+                            <button id="zoom-in" class="btn btn-dark btn-sm"><i class="fa fa-search-plus"
+                                                                                aria-hidden="true"></i></button>
+                            <button id="zoom-out" class="btn btn-dark btn-sm"><i class="fa fa-search-minus"
+                                                                                 aria-hidden="true"></i></button>
+
+                            <button id="clear" class="btn btn-dark btn-sm"><i class="fa fa-trash"
+                                                                              aria-hidden="true"></i></button>&nbsp;
+                            <span style="color: white;">Page: <span id="page_num"></span> / <span
+                                    id="page_count"></span></span>
+                        </div>
+                    </nav>
+                    <canvas id="the-canvas" class="col-md"></canvas>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/modal-loading.css' %}/>
+<link rel=" stylesheet" type="text/css" href="{% static 'css/modal-loading-animate.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/viewer.css' %}"/>
+    <style>
+
+    </style>
+
+    <script type="text/javascript" src="{% static 'js/annotorious.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'js/modal-loading.js' %}"></script>
+    <script>
+        $('#api-btn').click(function () {
+            console.log('button clicked')
+        })
+    </script>
+
+    <script>
         function loadingOut(loading) {
-				setTimeout(() => loading.out(), 3000);
-			}
+            setTimeout(() => loading.out(), 3000);
+        }
 
-			function normal() {
-				var loading = new Loading();
+        function normal() {
+            var loading = new Loading();
 
-				loadingOut(loading);
-			}
-</script>
+            loadingOut(loading);
+        }
+    </script>
 
-<script>
-$(function () {
-  $('[data-toggle="popover"]').popover()
-})
-</script>
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+    </script>
 
-<script>
+    <script>
 
-function addrow(name,quantity,rate){
-    var table = document.getElementById('item-table');
-    var row = table.insertRow();
+        function addrow(name, quantity, rate) {
+            var table = document.getElementById('item-table');
+            var row = table.insertRow();
 
-    var cell1 = row.insertCell(0)
-    var cell2 = row.insertCell(1)
-    var cell3 = row.insertCell(2)
-    var cell4 = row.insertCell(3)
+            var cell1 = row.insertCell(0)
+            var cell2 = row.insertCell(1)
+            var cell3 = row.insertCell(2)
+            var cell4 = row.insertCell(3)
 
-    var btn = document.createElement('BUTTON')
-    btn.innerHTML = 'delete'
+            var btn = document.createElement('BUTTON')
+            btn.innerHTML = 'delete'
 
-    cell1.innerText = name;
-    cell2.innerText = quantity;
-    cell3.innerText = rate;
-    cell4.innerHTML = "<button type='button' value='delete' class='btn btn-light btn-sm'  onclick='SomeDeleteRowFunction(this)'><i class='fa fa-trash'></i> </button>"
-}
+            cell1.innerText = name;
+            cell2.innerText = quantity;
+            cell3.innerText = rate;
+            cell4.innerHTML = "<button type='button' value='delete' class='btn btn-light btn-sm'  onclick='SomeDeleteRowFunction(this)'><i class='fa fa-trash'></i> </button>"
+        }
 
-function SomeDeleteRowFunction(o) {
-     //no clue what to put here?
-     var p=o.parentNode.parentNode;
-         p.parentNode.removeChild(p);
-    }
+        function SomeDeleteRowFunction(o) {
+            //no clue what to put here?
+            var p = o.parentNode.parentNode;
+            p.parentNode.removeChild(p);
+        }
 
-// hiding script
-$('#a-href').click(function () {
-    $('#invoice-card').toggle()
-    $('#invoice2-card').toggle()
-})
+        // hiding script
+        $('#a-href').click(function () {
+            $('#invoice-card').toggle()
+            $('#invoice2-card').toggle()
+        })
 
- $('#clear-of-items').click(function () {
-     $('#invoice-card').toggle()
-     $('#invoice2-card').toggle()
- })
+        $('#clear-of-items').click(function () {
+            $('#invoice-card').toggle()
+            $('#invoice2-card').toggle()
+        })
 
-$('#submit-of-items').click(function () {
+        $('#submit-of-items').click(function () {
 
-    $('#invoice-card').toggle()
-    $('#invoice2-card').toggle()
+            $('#invoice-card').toggle()
+            $('#invoice2-card').toggle()
 
-    console.log('in the submit')
+            console.log('in the submit')
 
-    item_d = $('#item_name_input').val()
-    item_r = $('#item_name_rate').val()
-    item_q = $('#item_name_quantity').val()
+            item_d = $('#item_name_input').val()
+            item_r = $('#item_name_rate').val()
+            item_q = $('#item_name_quantity').val()
 
 
-    addrow(item_d,item_r,item_q)
+            addrow(item_d, item_r, item_q)
 
-    item_values.push({
-    item_d :item_d,
-    item_r :item_r,
-    item_q:item_q
-    })
+            item_values.push({
+                item_d: item_d,
+                item_r: item_r,
+                item_q: item_q
+            })
 
-})
+        })
 
-</script>
+    </script>
 
-<script>
-// script for rendering pdf
-    // also adds the annotator.js
-    console.log('rendering')
+    <script>
+        // script for rendering pdf
+        // also adds the annotator.js
+        console.log('rendering')
 
-    var url = '{{ pdf_file }}'
-    console.log('pdf','{{ pdf_file }}')
+        var url = '{{ pdf_file }}'
+        console.log('pdf', '{{ pdf_file }}')
         // Loaded via <script> tag, create shortcut to access PDF.js exports.
         var pdfjsLib = window['pdfjs-dist/build/pdf'];
 
@@ -482,17 +504,18 @@ $('#submit-of-items').click(function () {
          * Get page info from document, resize canvas accordingly, and render page.
          * @param num Page number.
          */
-         console.log('height',canvas.height)
-        console.log('width',canvas.width)
-        console.log('ctx',ctx)
+        console.log('height', canvas.height)
+        console.log('width', canvas.width)
+        console.log('ctx', ctx)
         console.log(values)
+
         function renderPage(num) {
             pageRendering = true;
             // Using promise to fetch the page
             pdfDoc.getPage(num).then(function (page) {
-                var viewport = page.getViewport({ scale: scale });
+                var viewport = page.getViewport({scale: scale});
 
-                console.log('scaling',parseFloat(canvas.width) / parseFloat(viewport.width))
+                console.log('scaling', parseFloat(canvas.width) / parseFloat(viewport.width))
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
 
@@ -546,6 +569,7 @@ $('#submit-of-items').click(function () {
             anno = queueRenderPage(pageNum);
             anno.destroy()
         }
+
         document.getElementById('prev').addEventListener('click', onPrevPage);
 
         /**
@@ -559,14 +583,17 @@ $('#submit-of-items').click(function () {
             anno = queueRenderPage(pageNum);
             anno.destroy()
         }
+
         document.getElementById('next').addEventListener('click', onNextPage);
 
-        function clearPage(anno){
+        function clearPage(anno) {
             anno.destroy()
             renderPage(pageNum)
         }
 
-        document.getElementById('clear').addEventListener('click',function (){clearPage(anno)})
+        document.getElementById('clear').addEventListener('click', function () {
+            clearPage(anno)
+        })
 
         pdfjsLib.getDocument(url).promise.then(function (pdfDoc_) {
             pdfDoc = pdfDoc_;
@@ -578,37 +605,40 @@ $('#submit-of-items').click(function () {
         });
 
         var zoominbutton = document.getElementById("zoom-in");
-         zoominbutton.onclick = function() {
+        zoominbutton.onclick = function () {
             scale = scale + 0.25;
             queueRenderPage(pageNum);
-         }
+        }
 
-         var zoomoutbutton = document.getElementById("zoom-out");
-         zoomoutbutton.onclick = function() {
+        var zoomoutbutton = document.getElementById("zoom-out");
+        zoomoutbutton.onclick = function () {
             if (scale <= 0.25) {
-               return;
+                return;
             }
             scale = scale - 0.25;
             renderPage(pageNum);
-         }
+        }
 
-        function call(global_id_tag,vals) {
-            if(global_id_tag){
+        function call(global_id_tag, vals) {
+            if (global_id_tag) {
                 dict['vals'] = vals
                 dict['global_tag_id'] = global_id_tag
                 dict['pagenum'] = pageNum
                 dict['height'] = canvas.height
                 dict['width'] = canvas.width
                 values.push(dict)
-                document.getElementById(global_tag_id+'-i').className = 'fa fa-check'
-                console.log('values: ',values)
+                document.getElementById(global_tag_id + '-i').className = 'fa fa-check'
+                console.log('values: ', values)
 
-                send = JSON.stringify({annotation_values:values,item_values:item_values,invoice_id:$('#invoice_no_input').val()})
+                send = JSON.stringify({
+                    annotation_values: values,
+                    item_values: item_values,
+                    invoice_id: $('#invoice_no_input').val()
+                })
                 document.getElementById('additional-data-id').focus()
                 document.getElementById('additional-data-id').value = send;
-                console.log('data',document.getElementById('additional-data-id').value)
-            }
-            else {
+                console.log('data', document.getElementById('additional-data-id').value)
+            } else {
                 anno.destroy()
                 renderPage(pageNum)
                 alert('No Label selected')
@@ -617,74 +647,114 @@ $('#submit-of-items').click(function () {
         }
 
         function newannote() {
-        var anno = Annotorious.init({
-          image: 'the-canvas',
-          locale: 'auto',
-        });
+            var anno = Annotorious.init({
+                image: 'the-canvas',
+                locale: 'auto',
+            });
 
-        anno.on('selectAnnotation', function(annotation) {
-          console.log('selected', annotation);
-        });
+            anno.on('selectAnnotation', function (annotation) {
+                console.log('selected', annotation);
+            });
 
-        anno.on('createAnnotation', function(a) {
-            var vals = a.target.selector.value
-            console.log('created', vals);
-            console.log(vals)
-            console.log(global_tag_id)
-            call(global_tag_id,vals)
-        });
+            anno.on('createAnnotation', function (a) {
+                var vals = a.target.selector.value
+                console.log('created', vals);
+                console.log(vals)
+                console.log(global_tag_id)
+                call(global_tag_id, vals)
+            });
 
-        anno.on('updateAnnotation', function(annotation, previous) {
-          console.log('updated', previous, 'with', annotation);
-        });
+            anno.on('updateAnnotation', function (annotation, previous) {
+                console.log('updated', previous, 'with', annotation);
+            });
 
-        anno.on('deleteAnnotation', function(annotation) {
-          console.log('deleted', annotation);
-        });
+            anno.on('deleteAnnotation', function (annotation) {
+                console.log('deleted', annotation);
+            });
 
-        return anno
-      }
+            return anno
+        }
 
-      $('#invoice-form').submit(function () {
-          arr = []
-          var table = document.getElementById("item-table");
-          for (var i = 1, row; row = table.rows[i]; i++) {
-              console.log(row.cells[0])
-              arr.push({
-                  'item_d': row.cells[0].innerHTML,
-                  'item_r': row.cells[1].innerHTML,
-                  'item_q': row.cells[2].innerHTML
-              })
-          }
+        $('#invoice-form').submit(function () {
+            arr = []
+            var table = document.getElementById("item-table");
+            for (var i = 1, row; row = table.rows[i]; i++) {
+                console.log(row.cells[0])
+                arr.push({
+                    'item_d': row.cells[0].innerHTML,
+                    'item_r': row.cells[1].innerHTML,
+                    'item_q': row.cells[2].innerHTML
+                })
+            }
 
-          send = JSON.stringify({annotation_values: values, item_values: arr, invoice_id: $('#invoice_no_input').val()})
-          document.getElementById('ad-id').focus()
-          document.getElementById('ad-id').value = send;
-          console.log(document.getElementById('ad-id').value)
-      })
+            send = JSON.stringify({
+                annotation_values: values,
+                item_values: arr,
+                invoice_id: $('#invoice_no_input').val()
+            })
+            document.getElementById('ad-id').focus()
+            document.getElementById('ad-id').value = send;
+            console.log(document.getElementById('ad-id').value)
+        })
 
 
-</script>
+    </script>
 
-<script>
-            // script for extracting the tag
+    <script>
+        // script for extracting the tag
 
-          let global_tag_id ;
+        let global_tag_id;
 
-          function focus_id(tag_id) {
-              document.getElementById('pdf-card').className = "card pdf shadow-lg blue";
-              document.getElementById(tag_id+'_input').focus()
-              global_tag_id = tag_id
-          }
+        function focus_id(tag_id) {
+            document.getElementById('pdf-card').className = "card pdf shadow-lg blue";
+            document.getElementById(tag_id + '_input').focus()
+            global_tag_id = tag_id
+        }
 
-          document.getElementById('invoice_no').addEventListener('click',function (){focus_id('invoice_no')})
-          document.getElementById('invoice_date').addEventListener('click',function (){focus_id('invoice_date')})
-          document.getElementById('vendor_address').addEventListener('click',function (){focus_id('vendor_address')})
-          document.getElementById('vendor_name').addEventListener('click',function (){focus_id('vendor_name')})
-          document.getElementById('imei').addEventListener('click',function (){focus_id('imei')})
-          document.getElementById('gstin').addEventListener('click',function (){focus_id('gstin')})
-          document.getElementById('email').addEventListener('click',function (){focus_id('email')})
-          document.getElementById('phone_number').addEventListener('click',function (){focus_id('phone_number')})
-</script>
+        document.getElementById('invoice_no').addEventListener('click', function () {
+            focus_id('invoice_no')
+        })
+        document.getElementById('invoice_date').addEventListener('click', function () {
+            focus_id('invoice_date')
+        })
+        document.getElementById('vendor_address').addEventListener('click', function () {
+            focus_id('vendor_address')
+        })
+        document.getElementById('vendor_name').addEventListener('click', function () {
+            focus_id('vendor_name')
+        })
+        document.getElementById('imei').addEventListener('click', function () {
+            focus_id('imei')
+        })
+        document.getElementById('gstin').addEventListener('click', function () {
+            focus_id('gstin')
+        })
+        document.getElementById('email').addEventListener('click', function () {
+            focus_id('email')
+        })
+        document.getElementById('phone_number').addEventListener('click', function () {
+            focus_id('phone_number')
+        })
+
+        setInterval(function () {
+            if (global_tag_id) {
+                $('.r6o-widget.comment.editable > div').focus().html(global_tag_id)
+                $('.r6o-widget.comment.editable').hide()
+                $('.r6o-widget.comment').hide()
+                $('.r6o-widget.tag').hide();
+                $('.r6o-widget.tag > div').hide()
+            } else {
+                $('.r6o-widget.comment.editable').hide()
+                $('.r6o-widget.comment.editable > div').hide()
+                $('.r6o-widget.comment').hide()
+                $('.r6o-widget.comment > div').hide()
+                $('.r6o-widget.tag').hide();
+                $('.r6o-widget.tag > div').hide()
+            }
+            $('.r6o-btn.outline').addClass('btn btn-light ml-2')
+            $('.r6o-btn').addClass('btn btn-primary')
+            $('.r6o-editor').addClass('width-auto')
+        }, 100)
+    </script>
 
 {% endblock %}
