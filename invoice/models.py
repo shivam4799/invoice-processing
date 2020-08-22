@@ -1,20 +1,28 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Document(models.Model):
     pdf_copy = models.FileField(upload_to='', null=True, blank=True)
+    # tagging_done = models.BooleanField(default=False)
+    form_input_done = models.BooleanField(default=False)
+    created_by = models.CharField(max_length=256,null=True,blank=True)
+    last_modified_by_id = models.CharField(max_length=256,null=True,blank=True)
+    last_modified_by_name = models.CharField(max_length=256,null=True,blank=True)
+    last_modified = models.DateTimeField(auto_now_add=True,null=True)
+    autofill_done = models.BooleanField(default=False)
 
 
 class Invoice(models.Model):
-    document = models.ForeignKey(Document,on_delete=models.CASCADE,primary_key=False,null=True,blank=True)
+    document = models.OneToOneField(Document,on_delete=models.CASCADE,primary_key=False,null=True,blank=True)
     invoice_no = models.CharField(max_length=256)
     invoice_date = models.DateTimeField()
-    gstin = models.PositiveIntegerField()
-    cgst = models.PositiveIntegerField(null=True,blank=True)
-    sgst = models.PositiveIntegerField(null=True,blank=True)
-    igst = models.PositiveIntegerField(null=True,blank=True)
-    total_taxable_amount = models.PositiveIntegerField()
-    total_amount = models.PositiveIntegerField()
+    gstin = models.CharField(max_length=256,null=True,blank=True)
+    cgst = models.FloatField(null=True,blank=True)
+    sgst = models.FloatField(null=True,blank=True)
+    igst = models.FloatField(null=True,blank=True)
+    total_taxable_amount = models.FloatField()
+    total_amount = models.FloatField()
     vendor_name = models.CharField(max_length=256)
     email = models.EmailField()
     phone_number = models.PositiveIntegerField()
@@ -46,4 +54,13 @@ class TagCoordinate(models.Model):
     wmin = models.FloatField()
     hmax = models.FloatField()
     wmax = models.FloatField()
+    is_done = models.BooleanField(default=False,blank=True,null=True)
     page_id = models.PositiveIntegerField()
+
+
+class BulkDocument(models.Model):
+  file = models.FileField('Document', upload_to='mydocs/')
+
+
+class UploadPdf(models.Model):
+    file = models.FileField(upload_to='mydocs', blank=True, null=True)

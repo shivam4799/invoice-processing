@@ -1,0 +1,75 @@
+{% extends 'demo.html' %}
+
+{% load static %}
+{% block listinvoices %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/viewer.css' %}">
+
+<form style="padding-left: 10px" action="{% url 'fetch' %}" method="post">
+{% csrf_token  %}
+<table>
+    <tr>
+        <td>
+    <label for="exampleInputEmail1">Fetch Number of rows to fetch:</label>
+        </td>
+        <td>
+     <input type="number" name="number" class="form-control" id="number" placeholder="Enter number" style="width: 10rem;margin: 10px;" required>
+        </td>
+        <td>
+            <button type="submit" class="fill api-call">Fetch</button>
+        </td>
+    </tr>
+    </table>
+</form>
+
+
+<div class="container-fluid">
+    <table class="table table-bordered bg-white mt-4">
+                        <thead>
+                          <tr>
+                            <th scope="col">Document No</th>
+                            <th scope="col">Document Name</th>
+                              <th scope="col">Tagged</th>
+                            <th scope="col">Form filled</th>
+                              <th scope="col">Invoice Detail</th>
+                              <th scope="col" class="actionColumn" colspan="2">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {%for docs in fetched_data%}
+                          <tr>
+                            <td>{{ docs.id }}</td>
+                            <td>{{ docs.pdf_copy }}</td>
+                            <td>
+                                {{ count }} / {{ form.fields|length }}
+                            </td>
+
+                            <td>
+                                {% if docs.form_input_done %}
+                                    <span class="badge badge-success">Done</span>
+                                {% else %}
+                                    <span class="badge badge-danger">Pending</span>
+                                {% endif %}
+
+                            </td>
+                          <td>
+                          {% if docs.invoice %}
+                          <a href="{% url 'detail' docs.invoice.id %}">Detail</a>
+                          {% else %}
+                          <a href="">Not filled yet</a>
+                          {% endif %}
+                          </td>
+                            <td>
+                                {% if docs.form_input_done %}
+                                <a href="{% url 'update' docs.invoice.id %}" style="margin: 3px" ><i class="fa fa-wrench"></i></a>
+                                {% else %}
+                                <a href="{% url 'create_id' docs.id %}" style="margin: 3px" ><i class="fa fa-edit"></i> </a>
+                                {% endif%}
+                                <a href="{% url 'removeormakenull' docs.id %}" style="margin: 3px" ><i class="fa fa-trash"></i> </a>
+                            </td>
+                          </tr>
+                        {%endfor%}
+
+                        </tbody>
+                      </table>
+    </div>
+{% endblock %}

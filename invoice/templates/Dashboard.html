@@ -2,37 +2,64 @@
 
 
 {% block listinvoices %}
-    <div class="container-fluid">
-<table class="table table-bordered bg-white mt-4">
+{% load static %}
+
+
+<div class="container-fluid">
+    <table class="table table-bordered bg-white mt-4">
                         <thead>
                           <tr>
-                            <th scope="col">Invoice No</th>
-                            <th scope="col">Vendor</th>
-                            <th scope="col">GSTIN</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Document No</th>
+                            <th scope="col">Document Name</th>
+                            <th scope="col">Last Modified by</th>
+                            <th scope="col">Last Modified At</th>
+                            <th scope="col">Tagged</th>
+                              <th scope="col">Form Filled</th>
+                            <th scope="col">Autofill Done</th>
+                              <th scope="col">Detail</th>
                             <th scope="col" class="actionColumn" colspan="2">Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                        {%for invoice in invoices%}
+                        {%for doc in docs%}
                           <tr>
-                            <td>{{invoice.invoice_no}}</td>
-                            <td>{{invoice.vendor_name}}</td>
-                            <td>{{invoice.phone_number}}</td>
-                            <td>{{invoice.invoice_date}}</td>
+                            <td>{{doc.id}}</td>
+                            <td>{{doc.pdf_copy}}</td>
+                          <td>{{ doc.last_modified_by_name }}</td>
+                          <td>{{ doc.last_modified }}</td>
                             <td>
-                                <span class="badge badge-success">Success</span>
+                                {{ count }} / {{ form.fields|length }}
                             </td>
                             <td>
-                                <div class="invoice-show-inline-block">
-                                    <div class="invoice-bar">
-                                <a href="{% url 'detail' invoice.id %}"><i class="fas fa-info-circle" style="margin: 5px"></i></a>
-                                <a href="{% url 'update' invoice.id %}" ><i class="fa fa-edit" style="margin: 5px"></i></a>
-                                <a href="{% url 'delete' invoice.id %}" ><i class="fas fa-trash-alt " style="margin: 5px"></i></a>
-                                    </div>
-                                    </div>
+                                {% if doc.form_input_done %}
+                                    <span class="badge badge-success">Success</span>
+                                {% else %}
+                                    <span class="badge badge-danger">Pending</span>
+                                {% endif %}
                             </td>
+                            <td>
+                                {% if doc.form %}
+                                    <span class="badge badge-success">Success</span>
+                                {% else %}
+                                    <span class="badge badge-danger">Pending</span>
+                                {% endif %}
+                            </td>
+                          <td>
+                              {% if doc.invoice %}
+                              <a href="{% url 'detail' doc.invoice.id %}">Detail</a>
+                              {% else %}
+                              <a href="">Not filled yet</a>
+                              {% endif %}
+                          </td>
+                          <td>
+                              {% if doc.form_input_done %}
+                            <a href="{% url 'update' doc.invoice.id %}" style="margin: 3px" ><i class="fa fa-wrench"></i></a>
+                              {% else %}
+                            <a href="{% url 'create_id' doc.id %}" ><i class="fa fa-edit" style="margin: 5px"></i></a>
+                              {% endif %}
+                            <a href="{% url 'delete' doc.id %}" style="margin: 3px" ><i class="fa fa-trash"></i> </a>
+                          </td>
+
                           </tr>
                         {%endfor%}
 

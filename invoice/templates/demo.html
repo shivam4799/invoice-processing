@@ -3,13 +3,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <div class="container-fluid">
     <div class="formContainer">
-
-       <form method="post" enctype="multipart/form-data" action="{% url 'upload' %}" id="upload-document">
-         {% csrf_token %}
-            <input type="file" name="file" id="file" required>
-               <button type="submit" class="btn btn-primary" id="submit">Upload Pdf</button>
-        </form>
-
     </div>
 </div>
 

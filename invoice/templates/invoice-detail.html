@@ -1,27 +1,74 @@
 {% extends 'base.html' %}
-{% block listinvoices %}
-<div class="card">
-        <div class="card-header">
-            <h1><b>Invoice {{ object.id }}</b></h1>
-        </div>
-        <div class="card-body">
-        <table class="table table-bordered">
-                <tr>
-                    <td>Item Description </td>
-                    <td>Item Quantity</td>
-                    <td>Item Rate</td>
-                </tr>
-                {% for item in invoices_details.invoice.filter %}
-                <tr>
-                    <td>{{ item.item_description }}</td>
-                    <td>{{ item.item_quantity }}</td>
-                    <td>{{ item.item_rate }}</td>
-                </tr>
-                {% endfor %}
-              </table>
 
-        </div>
+{% block listinvoices %}
+    {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/viewer.css' %}">
+<div class="row" style="padding: 10px;margin:5px">
+    <div class="card col-md">
+        <table class="table table-hover">
+            <tr>
+                <td style="font-weight: bold">Invoice Number</td>
+                <td>{{ invoice.invoice_no }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold">Invoice Date</td>
+                <td>{{ invoice.invoice_date }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold">GSTIN</td>
+                <td>{{ invoice.gstin }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold">Total Taxable amount</td>
+                <td>{{ invoice.total_taxable_amount }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold">Total amount</td>
+                <td>{{ invoice.total_amount }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold">Email</td>
+                <td>{{ invoice.email }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold">Phone number</td>
+                <td>{{ invoice.phone_number }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold">IMEI</td>
+                <td>{{ invoice.imei }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold">Vendor Name</td>
+                <td>{{ invoice.vendor_name }}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold">Vendor State Code</td>
+                <td>{{ invoice.vendor_address }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="card col-md">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+            <td>Item </td>
+            <td>Item Rate</td>
+            <td>Item Quantity</td>
+            </tr>
+            </thead>
+            {% for items in invoice.invoice.all %}
+            <tr>
+            <td>{{ items.item_description }}</td>
+            <td>{{ items.item_rate }}</td>
+            <td>{{ items.item_quantity }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<div style="padding: 10px;margin-left: 5px">
+    <a href="{% url 'update' invoice.id %}" class="fill api-call">Update</a>
+    <a href="{% url 'invoices' %}" class="fill api-call">Back</a>
 </div>
 {% endblock %}
-
-

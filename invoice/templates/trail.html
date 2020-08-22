@@ -1,6 +1,31 @@
-<form method="post" enctype="multipart/form-data" action="https://convert-img-to-pdf-mti64mke4a-uc.a.run.app">
-             {% csrf_token %}
-                <input type="file" name="file" id="file">
-                   <button type="submit" class="btn btn-primary">Upload Pdf</button>
-                <input type="text" name="user_id" id="file">
-</form>
+{% load static %}
+<div class="upload">
+ <div class="upload-files">
+  <header>
+   <p>
+    <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+    <span class="up">up</span>
+    <span class="load">load</span>
+   </p>
+  </header>
+  <div class="body" id="drop">
+   <i class="fa fa-file-text-o pointer-none" aria-hidden="true"></i>
+   <p class="pointer-none"><b>Drag and drop</b> files here <br /> or <a href="" id="triggerFile">browse</a> to begin the upload</p>
+			<input type="file" multiple="multiple" />
+  </div>
+  <footer>
+   <div class="divider">
+    <span><AR>FILES</AR></span>
+   </div>
+   <div class="list-files">
+    <!--   template   -->
+   </div>
+			<button class="importar">UPDATE FILES</button>
+  </footer>
+ </div>
+</div>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/upload-box.scss' %}"/>
+<script src="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"></script>
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://fonts.googleapis.com/css?family=Roboto:100,300"></script>
