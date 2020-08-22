@@ -36,7 +36,7 @@
             <div class="col-md-6" id="invoice-card">
                 <div class="card">
                     <div class="card-body">
-                        <form id="api-form" action="{% url 'api' %}" method="post">
+                        <form id="api-form" action="{% url 'api' docs.id %}" method="post">
                             {% csrf_token %}
                             {#                                <input type="text" name="user_id" id="user_id" style="display: none" value="123">#}
                             <button type="submit" class="fill api-call" style="float:right; margin: 5px" id="api-btn"
@@ -48,8 +48,7 @@
                         <div class="mb-5">
                             <h4>Invoice Details</h4>
                         </div>
-
-                        <form action="{% url 'create' %}" method="post" id="invoice-form">
+                        <form action="{% url 'create_id' docs.id %}" method="post" id="invoice-form">
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-8">
@@ -136,7 +135,7 @@
                                         {{ form.total_taxable_amount }}
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="phone_number" data-toggle="popover" data-trigger="focus"
+                                                    id="total_taxable_amount" data-toggle="popover" data-trigger="focus"
                                                     data-content="Tagging active">
                                                 <i class="fa fa-tag" id="phone_number-i"></i>
                                             </button>
@@ -150,7 +149,7 @@
                                         {{ form.total_amount }}
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary btn-sm" type="button"
-                                                    id="email" data-toggle="popover" data-trigger="focus"
+                                                    id="total_amount" data-toggle="popover" data-trigger="focus"
                                                     data-content="Tagging active">
                                                 <i class="fa fa-tag" id="email_i"></i>
                                             </button>
@@ -348,9 +347,9 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="card pdf" id="pdf-card" style="width: 600px; height: 900px">
-                    <nav class="navbar navbar-dark bg-dark shadow-lg">
+            <div>
+                <div class="card pdf" id="pdf-card" style="width: 600px; height: 900px;overflow: scroll" >
+                    <nav class="navbar navbar-dark bg-dark shadow-lg" style="width: auto">
                         <div class="text-center col-md">
                             <button id="prev" class="btn btn-dark btn-sm"><i class="fa fa-reply" aria-hidden="true"></i>
                             </button>
@@ -367,7 +366,7 @@
                                     id="page_count"></span></span>
                         </div>
                     </nav>
-                    <canvas id="the-canvas" class="col-md"></canvas>
+                    <canvas id="the-canvas"></canvas>
                 </div>
             </div>
         </div>
@@ -376,7 +375,7 @@
     </div>
 
 
-    <link rel="stylesheet" type="text/css" href="{% static 'css/modal-loading.css' %}/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/modal-loading.css' %}"/>
 <link rel=" stylesheet" type="text/css" href="{% static 'css/modal-loading-animate.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/viewer.css' %}"/>
     <style>
@@ -735,6 +734,13 @@
         document.getElementById('phone_number').addEventListener('click', function () {
             focus_id('phone_number')
         })
+        document.getElementById('total_taxable_amount').addEventListener('click', function () {
+            focus_id('total_taxable_amount')
+        })
+        document.getElementById('total_amount').addEventListener('click', function () {
+                    focus_id('total_amount')
+        })
+
 
         setInterval(function () {
             if (global_tag_id) {
@@ -754,6 +760,8 @@
             $('.r6o-btn.outline').addClass('btn btn-light ml-2')
             $('.r6o-btn').addClass('btn btn-primary')
             $('.r6o-editor').addClass('width-auto')
+            $('.r6o-editor.align-right.width-auto').prop('style').width = 'auto'
+
         }, 100)
     </script>
 
