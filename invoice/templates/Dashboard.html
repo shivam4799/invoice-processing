@@ -38,7 +38,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if doc.form %}
+                                {% if doc.autofill_done %}
                                     <span class="badge badge-success">Success</span>
                                 {% else %}
                                     <span class="badge badge-danger">Pending</span>
@@ -48,11 +48,11 @@
                               {% if doc.invoice %}
                               <a href="{% url 'detail' doc.invoice.id %}">Detail</a>
                               {% else %}
-                              <a href="">Not filled yet</a>
+                              <a disabled>Not filled yet</a>
                               {% endif %}
                           </td>
                           <td>
-                              {% if doc.form_input_done %}
+                              {% if doc.form_input_done or doc.autofill_done %}
                             <a href="{% url 'update' doc.invoice.id %}" style="margin: 3px" ><i class="fa fa-wrench"></i></a>
                               {% else %}
                             <a href="{% url 'create_id' doc.id %}" ><i class="fa fa-edit" style="margin: 5px"></i></a>

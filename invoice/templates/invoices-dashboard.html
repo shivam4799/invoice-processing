@@ -59,7 +59,7 @@
                           {% endif %}
                           </td>
                             <td>
-                                {% if docs.form_input_done %}
+                                {% if docs.autofill_done %}
                                 <a href="{% url 'update' docs.invoice.id %}" style="margin: 3px" ><i class="fa fa-wrench"></i></a>
                                 {% else %}
                                 <a href="{% url 'create_id' docs.id %}" style="margin: 3px" ><i class="fa fa-edit"></i> </a>

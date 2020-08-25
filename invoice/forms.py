@@ -16,7 +16,7 @@ class InvoicesForm(forms.ModelForm):
         exclude = ('created_by',)
 
         widgets = {
-            'invoice_no': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'id':'invoice_no_input',},),
+            'invoice_no': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'id':'invoice_no_input'}),
             'invoice_date': forms.DateInput(attrs={'class': 'form-control form-control-sm', 'id':'invoice_date_input'}),
             'gstin': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'id':'gstin_input'}),
             'vendor_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'id':'vendor_name_input'}),

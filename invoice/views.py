@@ -11,10 +11,12 @@ import requests
 from django.urls import reverse_lazy
 from django.core.files.storage import FileSystemStorage
 import os
-from autoshift.settings import PDF_FILES,PROJECT_ROOT,BASE_DIR
+from autoshift.settings import PDF_FILES,PROJECT_ROOT,MEDIA_ROOT
 from pathlib import Path
 import img2pdf
 from PIL import Image
+from time import sleep
+from django_q.tasks import async_task
 
 
 class CreateForm(LoginRequiredMixin,CreateView):
@@ -97,8 +99,9 @@ class InvoiceList(LoginRequiredMixin,ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(InvoiceList, self).get_context_data(**kwargs)
         qs = Document.objects.filter(last_modified_by_id=self.request.user.id)
-
         context['fetched_data'] = qs
+        for q in qs:
+            print(q.id)
         context['count'] = count_tagged_number(qs)
         context['form'] = InvoicesForm()
         return context
@@ -121,6 +124,7 @@ class InvoiceListModel(LoginRequiredMixin,ListView):
         context['form'] = InvoicesForm
         context['count'] = count_tagged_number(qs)
         context['docs'] = qs
+
         return context
 
 
@@ -161,12 +165,13 @@ class InvoiceUpdateView(LoginRequiredMixin,UpdateView):
     def get_context_data(self, **kwargs):
         print('in get context data')
         data = super(InvoiceUpdateView,self).get_context_data(**kwargs)
-        path_file = self.model.objects.filter(id=self.kwargs['pk'])
-        for p in path_file:
-            data['docs'] = p
-            data['pdf_file'] = p.document.pdf_copy
+        path_file = self.model.objects.get(id=self.kwargs['pk'])
+        data['docs'] = path_file
+
+        data['pdf_file'] = Document.objects.get(invoice=path_file).pdf_copy
 
         data['items'] = Item.objects.filter(invoice=self.object)
+        print(data['pdf_file'])
         return data
 
     def form_valid(self, form):
@@ -195,7 +200,7 @@ class InvoiceUpdateView(LoginRequiredMixin,UpdateView):
         return super(InvoiceUpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('invoices')
+        return reverse_lazy('home')
 
 
 class BulkUploadView(LoginRequiredMixin,TemplateView):
@@ -205,7 +210,7 @@ class BulkUploadView(LoginRequiredMixin,TemplateView):
 def fetch(request):
     number = request.POST.get('number')
 
-    qs = Document.objects.filter(last_modified_by_id=None).order_by('-id')[:int(number)][::-1]
+    qs = Document.objects.filter(last_modified_by_id=None).filter(autofill_done=True).order_by('-id')[:int(number)][::-1]
 
     for q in qs:
         q.last_modified_by_id = request.user.id
@@ -232,6 +237,80 @@ class SettingsPage(TemplateView,LoginRequiredMixin):
     template_name = 'settings_profile.html'
 
 
+def autofill_async(id):
+    form = InvoicesForm()
+
+    doc = Document.objects.get(id=id)
+
+    url = "https://process-workorder-sync-55eyzztxca-uc.a.run.app"
+
+    path = str(Path(PROJECT_ROOT)) + str(Path(str(doc.pdf_copy)))
+    path = os.path.normpath(path)
+
+    payload = {'user_id': '123'}
+
+    files = [
+        ('file', open(str(path), 'rb'))
+    ]
+
+
+    headers = {}
+
+    response = requests.request("POST", url, headers=headers, data=payload, files=files)
+
+    response = response.json()['data']
+
+    print(response)
+
+    invoice_number = response['invoice_number']
+    invoice_date = response['invoice_date']
+    gstin = response['vendor_gstin']
+    vendor_address = response['state_code']
+    total_amount = response['total_amount']
+    imei = response['imei']
+    sgst = response['sgsts']
+    cgst = response['cgsts']
+    igst = response['igsts']
+    total_taxable_amount = response['total_taxable_amount']
+
+    invoice_date[0]['value'] = datetime.datetime.strptime(invoice_date[0]['value'], '%d/%m/%Y').strftime('%Y-%m-%d')
+
+    if invoice_number:
+        form.instance.invoice_no = invoice_number[0]['value']
+    if invoice_date:
+        form.instance.invoice_date = invoice_date[0]['value']
+    if gstin:
+        form.instance.gstin = gstin[0]['value']
+    if total_amount:
+        form.instance.total_amount = total_amount[0]['value']
+    if sgst:
+        # form.instance.sgst = sgst[0]['value']
+        pass
+    if cgst:
+        # form.instance.cgst = cgst[0]['value']
+        pass
+    if igst:
+        # form.instance.igst = igst[0]['value']
+        pass
+    if total_taxable_amount:
+        form.instance.total_taxable_amount = total_taxable_amount[0]['value']
+    if vendor_address:
+        form.instance.vendor_address = vendor_address[0]['value']
+    if imei:
+        form.instance.imei = imei[0]['value']
+
+    form.instance.save()
+    doc.invoice = form.instance
+    print(doc.invoice)
+
+    doc.autofill_done = True
+    doc.pdf_copy = str(doc.pdf_copy).split('.')[0] + '.pdf'
+
+    doc.save()
+
+    print('saving form now !!')
+
+
 def upload(request):
     if request.method == 'POST':
         files = request.FILES.getlist('file')
@@ -239,8 +318,11 @@ def upload(request):
             fs = FileSystemStorage()
             name = fs.save(f.name, f)
             url = fs.url(name)
+
             doc = Document(pdf_copy=url,created_by=request.user.id)
             doc.save()
+
+            async_task('invoice.views.autofill_async',doc.id)
 
             try:
                 path_file = Document.objects.filter().last()
@@ -263,9 +345,9 @@ def upload(request):
                 image.close()
 
                 pdfdoc = Document(pdf_copy=pdf_path_media,created_by=request.user.id)
-                pdfdoc.save()
+                # pdfdoc.save()
 
-                doc.delete()
+                # doc.delete()
                 file.close()
 
             except:
@@ -279,44 +361,40 @@ def upload(request):
 def multipage_upload(request):
     print('calling api')
     url = "https://convert-img-to-pdf-mti64mke4a-uc.a.run.app"
+    multipage_files = []
+
+    files = request.FILES.getlist('image')
+
+    for f in files:
+        multipage_files.append(('file',(f.name,f,'image/jpeg')))
+        print(f.name)
 
     payload = {}
 
-    inner_file = ('file',open('C:\\Users\\Shivam Patel\\Downloads\\_downloadfiles_wallpapers_1600_900_joker_the_dark_knight_8307.jpg',
-              'rb'),'image/jpeg')
-
-    files = [
-        ('file',inner_file)
-    ]
-
-    headers = {
-        'Content-Type': 'application/json'
-    }
-
-    response = requests.request("POST", url,data=payload, files=files)
+    response = requests.request("POST",url,data=payload,files=multipage_files)
+    pdf_path = str(Path(MEDIA_ROOT)) + str('/')
+    print('pdf path error',pdf_path)
+    pdf_path = str(pdf_path) +str(f.name).split('.')[0] + '.pdf'
+    pdf_path = os.path.normpath(pdf_path)
+    print('pdf',pdf_path)
+    doc_path = '/media/' + str(f.name).split('.')[0] + '.pdf'
 
     if response:
         print('pdf generated')
-        with open('temp.pdf', 'wb') as f:
+        with open(pdf_path, 'wb') as f:
             for chunk in response.iter_content(chunk_size=1024*1024):
                 if chunk:
-                    print(chunk)
                     f.write(chunk)
                     f.flush()
                     os.fsync(f.fileno())
                     print('write')
 
-    print(response.request.body)
+    doc = Document(pdf_copy=doc_path, created_by=request.user.id)
+    doc.save()
 
-    print(type(response))
-    return JsonResponse({'success':False})
+    async_task('invoice.views.autofill_async', doc.id)
 
-    # if request.method == 'POST':
-    #     files = request.FILES.getlist('file')
-    #     multiple_files = []
-    #     for f in files:
-    #         multiple_files.append(("file", (filename, obj, mimetype)))
-    #         print(f)
+    return redirect('home')
 
 
 class Demo(TemplateView):
@@ -329,7 +407,7 @@ class Testing(TemplateView):
 
 def api_call(request,pk):
     context = {}
-    path_file = Document.objects.filter().last()
+    path_file = Document.objects.get(id=pk)
     pdf_file = str(path_file.pdf_copy).split('.')[0] + '.pdf'
     context['pdf_file'] = pdf_file
 
