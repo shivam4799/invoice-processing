@@ -1,0 +1,302 @@
+{% extends 'base.html' %}
+{% block listinvoices %}
+{% load static %}
+<br>
+{{ form.errors }}
+
+
+<div class="col-lg-7" style="background: #666; width: 100%; padding: 0; overflow: scroll">
+  <div class="text-center col-md-12 bg-dark pt-2 pb-2" style="width: 100%">
+    <button id="prev" class="btn btn-dark btn-sm">
+      <i class="fa fa-reply" aria-hidden="true"></i>
+    </button>
+    <button id="next" class="btn btn-dark btn-sm">
+      <i class="fa fa-share" aria-hidden="true"></i>
+    </button>
+    <button id="zoom-in" class="btn btn-dark btn-sm">
+      <i class="fa fa-search-plus" aria-hidden="true"></i>
+    </button>
+    <button id="zoom-out" class="btn btn-dark btn-sm">
+      <i class="fa fa-search-minus" aria-hidden="true"></i>
+    </button>
+
+    <button id="clear" class="btn btn-dark btn-sm">
+      <i class="fa fa-trash" aria-hidden="true"></i></button>&nbsp;
+    <span style="color: white">Page: <span id="page_num">2</span> /
+      <span id="page_count">2</span></span>
+    <button id="current-tool" class="ml-3">RECTANGLE</button>
+  </div>
+
+
+  <canvas id="the-canvas" class="pt-3"></canvas>
+</div>
+
+
+</div>
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/modal-loading.css' %}" />
+<link rel=" stylesheet" type="text/css" href="{% static 'css/modal-loading-animate.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/viewer.css' %}" />
+<style>
+
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+  integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+<script src="{% static 'js/modal-loading.js' %}"></script>
+<script>
+  $('#api-btn').click(function () {
+    console.log('button clicked')
+  })
+</script>
+
+
+
+<script>
+    (function () {
+      var anno = Annotorious.init({
+        image: "the-canvas",
+        locale: "auto",
+        // headless:true
+      });
+      anno.applyTemplate({
+        type: "TextualBody",
+        purpose: "tagging",
+        value: "annotation-label",
+      });
+
+      // anno.applyTemplate({template:String});
+      console.log(anno);
+
+      anno.on("selectAnnotation", function (annotation) {
+        console.log("selected", annotation);
+      });
+
+      anno.on("createAnnotation", function (a) {
+        console.log("created", a);
+      });
+
+      anno.on("updateAnnotation", function (annotation, previous) {
+        console.log("updated", previous, "with", annotation);
+      });
+
+      anno.on("deleteAnnotation", function (annotation) {
+        console.log("deleted", annotation);
+      });
+
+      anno.loadAnnotations("{% static 'js/annotations.w3c.json' %}");
+
+      anno.setDrawingTool("rect");
+
+      var toolToggle = document.getElementById("current-tool");
+      toolToggle.addEventListener("click", function () {
+        if (toolToggle.innerHTML == "RECTANGLE") {
+          toolToggle.innerHTML = "POLYGON";
+          anno.setDrawingTool("polygon");
+        } else {
+          toolToggle.innerHTML = "RECTANGLE";
+          anno.setDrawingTool("rect");
+        }
+      });
+    })();
+</script>
+
+<script>
+  // script for rendering pdf
+  // also adds the annotator.js
+  console.log('rendering')
+  // If absolute URL from the remote server is provided, configure the CORS
+  // header on that server.
+  var url =
+    "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf";
+
+  // Loaded via <script> tag, create shortcut to access PDF.js exports.
+  var pdfjsLib = window["pdfjs-dist/build/pdf"];
+
+  // The workerSrc property shall be specified.
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "//mozilla.github.io/pdf.js/build/pdf.worker.js";
+
+  var pdfDoc = null,
+    pageNum = 1,
+    pageRendering = false,
+    pageNumPending = null,
+    scale = 1.3,
+    canvas = document.getElementById("the-canvas"),
+    ctx = canvas.getContext("2d");
+
+  /**
+   * Get page info from document, resize canvas accordingly, and render page.
+   * @param num Page number.
+   */
+  function renderPage(num) {
+    pageRendering = true;
+    // Using promise to fetch the page
+    pdfDoc.getPage(num).then(function (page) {
+      console.log(scale);
+      var viewport = page.getViewport({ scale: scale });
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      // Render PDF page into canvas context
+      var renderContext = {
+        canvasContext: ctx,
+        viewport: viewport,
+      };
+      var renderTask = page.render(renderContext);
+
+      // Wait for rendering to finish
+      renderTask.promise.then(function () {
+        pageRendering = false;
+        if (pageNumPending !== null) {
+          // New page rendering is pending
+          renderPage(pageNumPending);
+          pageNumPending = null;
+        }
+      });
+    });
+
+    // Update page counters
+    document.getElementById("page_num").textContent = num;
+  }
+
+  /**
+   * If another page rendering in progress, waits until the rendering is
+   * finised. Otherwise, executes rendering immediately.
+   */
+  function queueRenderPage(num) {
+    if (pageRendering) {
+      pageNumPending = num;
+    } else {
+      renderPage(num);
+    }
+  }
+
+  /**
+   * Displays previous page.
+   */
+  function onPrevPage() {
+    if (pageNum <= 1) {
+      return;
+    }
+    pageNum--;
+    queueRenderPage(pageNum);
+  }
+  document.getElementById("prev").addEventListener("click", onPrevPage);
+
+  /**
+   * Displays next page.
+   */
+  function onNextPage() {
+    if (pageNum >= pdfDoc.numPages) {
+      return;
+    }
+    pageNum++;
+    queueRenderPage(pageNum);
+  }
+  document.getElementById("next").addEventListener("click", onNextPage);
+
+  function onZoomIn() {
+    scale = scale + 0.25;
+    renderPage(pageNum);
+  }
+  document.getElementById("zoom-in").addEventListener("click", onZoomIn);
+
+  function onZoomOut() {
+    if (scale <= 0.25) {
+      return;
+    }
+    scale = scale - 0.25;
+    renderPage(pageNum);
+  }
+  document.getElementById("zoom-out").addEventListener("click", onZoomOut);
+
+  /**
+   * Asynchronously downloads PDF.
+   */
+  pdfjsLib.getDocument(url).promise.then(function (pdfDoc_) {
+    pdfDoc = pdfDoc_;
+    document.getElementById("page_count").textContent = pdfDoc.numPages;
+
+    // Initial/first page rendering
+    renderPage(pageNum);
+  });
+
+  function call(global_id_tag, vals) {
+    if (global_id_tag) {
+      dict['vals'] = vals
+      dict['global_tag_id'] = global_id_tag
+      dict['pagenum'] = pageNum
+      dict['height'] = canvas.height
+      dict['width'] = canvas.width
+      values.push(dict)
+      document.getElementById(global_tag_id + '-i').className = 'fa fa-check'
+      console.log('values: ', values)
+
+      send = JSON.stringify({
+        annotation_values: values,
+        item_values: item_values,
+        invoice_id: $('#invoice_no_input').val()
+      })
+      document.getElementById('additional-data-id').focus()
+      document.getElementById('additional-data-id').value = send;
+      console.log('data', document.getElementById('additional-data-id').value)
+    } else {
+      anno.destroy()
+      renderPage(pageNum)
+      alert('No Label selected')
+      return
+    }
+  }
+
+  (function () {
+    newannote()
+
+
+  })();
+
+  function newannote() {
+    var anno2 = Annotorious.init({
+      image: 'the-canvas',
+      locale: 'auto',
+      headless: true
+    });
+
+    console.log(anno2);
+
+    anno2.on('selectAnnotation', function (annotation) {
+      console.log('selected', annotation);
+      console.log(document.getElementById('the-canvas').width);
+    });
+
+    anno2.on('createAnnotation', function (a) {
+      console.log(document.getElementById('the-canvas').width);
+
+      var vals = a.target.selector.value
+      console.log('created', vals);
+      console.log(vals)
+      console.log(global_tag_id)
+      call(global_tag_id, vals)
+    });
+
+    anno2.on('updateAnnotation', function (annotation, previous) {
+      console.log('updated', previous, 'with', annotation);
+    });
+
+    anno2.on('deleteAnnotation', function (annotation) {
+      console.log('deleted', annotation);
+    });
+
+    return anno2
+  }
+
+</script>
+
+
+
+<!-- $('.r6o-editor.align-right.width-auto').prop('style').width = 'auto' -->
+{% endblock %}
