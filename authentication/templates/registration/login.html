@@ -59,6 +59,16 @@
                               </button>
                               <a type="button" class="btn btn-link" href="{% url 'password_reset' %}">Forgot Password</a>
                             </div>
+                                {% if messages %}
+                        	   {% for message in messages %}
+				        	<div class="alert" style="border: 1px">
+                                <span class="closebtn" onclick="this.parentElement.style.display='none';">
+                                {{message}}
+                                </span>
+                            </div>
+                                {% endfor %}
+                                {% endif %}
+
                           </form>
                       
                          

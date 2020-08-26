@@ -33,6 +33,8 @@ class HomePage(View):
             print('in the login')
             auth.login(request,user)
             return HttpResponseRedirect('/')
+        else:
+            messages.error(request,'Login failed')
 
         return render(request,'registration/login.html')
 

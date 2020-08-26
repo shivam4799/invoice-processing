@@ -2,8 +2,29 @@ from django.db import models
 from django.urls import reverse
 
 
+class Invoice(models.Model):
+    # document = models.OneToOneField(Document,on_delete=models.CASCADE,primary_key=False,null=True,blank=True)
+    invoice_no = models.CharField(max_length=256,null=True,blank=True)
+    invoice_date = models.DateTimeField(null=True,blank=True)
+    gstin = models.CharField(max_length=256,null=True,blank=True)
+    cgst = models.FloatField(null=True,blank=True)
+    sgst = models.FloatField(null=True,blank=True)
+    igst = models.FloatField(null=True,blank=True)
+    total_taxable_amount = models.FloatField(null=True,blank=True)
+    total_amount = models.FloatField(null=True,blank=True)
+    vendor_name = models.CharField(max_length=256,null=True,blank=True)
+    email = models.EmailField(null=True,blank=True)
+    phone_number = models.PositiveIntegerField(null=True,blank=True)
+    imei = models.PositiveIntegerField(null=True,blank=True)
+    vendor_address = models.CharField(max_length=256,null=True,blank=True)
+    status = models.BooleanField(null=True,blank=True)
+    created_by = models.CharField(max_length=256,null=True,blank=True)
+    additional_data = models.CharField(max_length=10000,null=True,blank=True,default="")
+
+
 class Document(models.Model):
     pdf_copy = models.FileField(upload_to='', null=True, blank=True)
+    invoice = models.OneToOneField(Invoice,on_delete=models.CASCADE,null=True,blank=True)
     # tagging_done = models.BooleanField(default=False)
     form_input_done = models.BooleanField(default=False)
     created_by = models.CharField(max_length=256,null=True,blank=True)
@@ -11,26 +32,6 @@ class Document(models.Model):
     last_modified_by_name = models.CharField(max_length=256,null=True,blank=True)
     last_modified = models.DateTimeField(auto_now_add=True,null=True)
     autofill_done = models.BooleanField(default=False)
-
-
-class Invoice(models.Model):
-    document = models.OneToOneField(Document,on_delete=models.CASCADE,primary_key=False,null=True,blank=True)
-    invoice_no = models.CharField(max_length=256)
-    invoice_date = models.DateTimeField()
-    gstin = models.CharField(max_length=256,null=True,blank=True)
-    cgst = models.FloatField(null=True,blank=True)
-    sgst = models.FloatField(null=True,blank=True)
-    igst = models.FloatField(null=True,blank=True)
-    total_taxable_amount = models.FloatField()
-    total_amount = models.FloatField()
-    vendor_name = models.CharField(max_length=256)
-    email = models.EmailField()
-    phone_number = models.PositiveIntegerField()
-    imei = models.PositiveIntegerField()
-    vendor_address = models.CharField(max_length=256)
-    status = models.BooleanField(null=True,blank=True)
-    created_by = models.CharField(max_length=256)
-    additional_data = models.CharField(max_length=10000,null=True,blank=True,default="")
 
 
 class Item(models.Model):
